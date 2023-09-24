@@ -1,10 +1,27 @@
-<script setup lang="ts">
-import { RouterLink, RouterView } from 'vue-router'
-import HelloWorld from './components/HelloWorld.vue'
-</script>
-
 <template>
-    <h1 class="text-3xl font-bold underline text-blue-400">
-      Hello world!
-    </h1>
+  <RouterView v-slot=" {Component}">
+    <Component :is="detectLayout">
+      <Component :is="Component"/>
+    </Component>
+  </RouterView>
 </template>
+
+<script setup lang="ts">
+import {useRoute} from "vue-router";
+import LError from "@/layout/LError.vue";
+import {computed} from "vue";
+import LAuth from "@/layout/LAuth.vue";
+import LDefault from "@/layout/LDefault.vue";
+
+const route = useRoute()
+
+const layouts: { [key: string]: any } = {
+  default: LDefault,
+  auth: LAuth,
+  error: LError
+}
+
+const detectLayout = computed(() => {
+  return layouts[route.meta.layout as string]
+})
+</script>

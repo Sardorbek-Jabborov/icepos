@@ -40,7 +40,6 @@
   </div>
 </template>
 <script setup lang="ts">
-import {useApi} from "@/helpers/axios";
 import {useVuelidate} from '@vuelidate/core'
 import {required} from '@vuelidate/validators'
 import {onBeforeUnmount, reactive, ref, watch} from 'vue'
@@ -49,12 +48,10 @@ import Input from "@/components/Input/Input.vue";
 import VButton from "@/components/Button/VButton.vue";
 import IconsClose from "@/components/Icons/Close.vue"
 import IconsSave from "@/components/Icons/Save.vue";
-import {useToast} from "vue-toastification";
 
 
 const props = defineProps<Props>()
 const store = useProductStore()
-const toast = useToast()
 
 interface Props {
   show: boolean
@@ -137,14 +134,13 @@ input {
 }
 
 input:focus::selection {
-  background-color: #3490dc; /* Background color */
-  color: white; /* Text color */
+  background-color: #3490dc;
+  color: white;
 }
 
-/* Style the caret when the input is focused and the cursor is at the beginning */
 input:focus::selection,
 input:focus::selection {
-  background-color: #3490dc; /* Background color */
-  color: white; /* Text color */
+  background-color: #3490dc;
+  color: white;
 }
 </style>

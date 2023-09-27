@@ -46,8 +46,8 @@
                         class="px-4 py-2 bg-gray-200 rounded-l-lg border-r border-gray-700">-
                 </button>
                 <input type="number" v-model="basketItem.quantity" @input="updateQuantity(basketItem)"
-                       class="outline-0 max-w-[150px]"
-                       min="0">
+                       class="outline-0 max-w-[50px]"
+                       min="0" max="99999">
                 <button @click="basketItem.quantity++"
                         class="px-4 py-2 bg-gray-200 rounded-r-lg border-l border-gray-700">+
                 </button>
@@ -149,16 +149,16 @@ onMounted(() => {
   fetchData()
 })
 
-const updateQuantity = (item: any) => {
-  let newValue = parseInt(item.quantity, 10) || 0;
-  newValue = Math.max(0, newValue); // Ensure it doesn't go below 1
-  item.quantity = newValue.toString(); // Convert back to string for input field
+const updateQuantity = (item) => {
+  let newValue = Math.max(0, parseInt(item.quantity, 10) || 0);
+  item.quantity = newValue.toString().slice(0, 5);
   for (let i = 0; i < basket.basket.productId.length; i++) {
     if (basket.basket.productId[i].product == item.product.id) {
-      basket.basket.productId[i].quantity = newValue
+      basket.basket.productId[i].quantity = newValue;
     }
   }
 };
+
 
 const createOrder = () => {
   basket.createOrder(selectedCourier.value, selectedConsumer.value, basket.basket.productId, fullPaid.value, paidPrice.value)

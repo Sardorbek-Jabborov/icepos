@@ -18,7 +18,7 @@
           class="outline-0 text-sm text-black-100 leading-130 bg-[#F9FAFF] w-full caret-gray placeholder:text-sm"
           :maxlength="maxlength"
           :placeholder="placeholder"
-      />
+       error/>
     </div>
   </div>
 </template>

@@ -1,6 +1,7 @@
-import { ref, computed } from 'vue'
-import { defineStore } from 'pinia'
+import {computed} from 'vue'
+import {defineStore} from 'pinia'
 import {getItem, removeItem, setItem} from '@/service/localstorage'
+import {useApi} from "@/helpers/axios";
 
 interface ITokens {
     accessToken: string
@@ -11,6 +12,7 @@ interface ITokens {
 export const useAuthStore = defineStore('main', () => {
     const accessToken = getItem('access_token')
     const refreshToken = getItem('refresh_token')
+    const username = getItem('username')
 
     const isAuthenticated = computed(() => {
         return !(!accessToken && !refreshToken)
@@ -36,7 +38,7 @@ export const useAuthStore = defineStore('main', () => {
         setItem('username', tokens.username)
     }
 
-    return { login, getTokens, logOut, isAuthenticated }
+    return {login, getTokens, logOut, isAuthenticated}
 })
 
 export default useAuthStore

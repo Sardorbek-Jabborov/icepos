@@ -13,7 +13,6 @@ export const useBasketStore = defineStore('basket', () => {
 
     const addToBasket = (item: { id: any; }) => {
         onlyByID(item)
-        console.log(item);
         const existingItem = basket.products.find((basketItem) => basketItem.product.id === item.id);
         if (existingItem) {
             existingItem.quantity += 1;
@@ -49,7 +48,6 @@ export const useBasketStore = defineStore('basket', () => {
         } else {
             console.warn(`Item with id ${id} not found in the basket.`);
         }
-        console.log(basket.products);
     };
 
     const createOrder = (courierId: any, consumerId: any, products: any, full_paid: boolean, price_paid: any) => {

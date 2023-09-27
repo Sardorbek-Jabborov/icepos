@@ -47,7 +47,7 @@
                 </button>
                 <input type="number" v-model="basketItem.quantity" @input="updateQuantity(basketItem)"
                        class="outline-0 max-w-[150px]"
-                       min="0" onkeypress="this.style.width = ((this.value.length + 1) * 8) + 'px';">
+                       min="0">
                 <button @click="basketItem.quantity++"
                         class="px-4 py-2 bg-gray-200 rounded-r-lg border-l border-gray-700">+
                 </button>
@@ -138,7 +138,6 @@ const fetchData = async () => {
   try {
     const response = await store.getProductAll(search.value, 1, 5)
     products.data = response.results;
-    console.log(products.data)
   } catch (error) {
     toast.error("Error fetching objects")
     console.error('Error fetching objects:', error);
@@ -174,14 +173,15 @@ const createOrder = () => {
 
 async function load_page() {
   try {
-    const response = await useApi.get('/consumers/?page_size=100');
+    const response = await useApi.get('/consumers/?page_size=10');
     consumers.data = response.results;
   } catch (error) {
+    console.log(error)
     console.error('Error fetching objects:', error);
   }
 
   try {
-    const response = await useApi.get('/couriers/?page_size=100');
+    const response = await useApi.get('/couriers/?page_size=10');
     couriers.data = response.results;
   } catch (error) {
     console.error('Error fetching objects:', error);
@@ -216,12 +216,9 @@ const totalPrice = computed(() => {
 //       "quantity": 1,
 //     });
 //   }
-//   console.log(basket.products);
 // };
 const addToBasket = (item) => {
   basket.addToBasket(item);
-  console.log(basket.basket)
-  console.log(basket.basket.products)
 };
 </script>
 

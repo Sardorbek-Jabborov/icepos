@@ -100,7 +100,6 @@ const submitForm = async () => {
       phone_number2: `+998${form.phone_number2}`,
     }
     const response = await useApi[method](url, data)
-    console.log(response)
     props.consumer.value = response
   }
   emit('close')

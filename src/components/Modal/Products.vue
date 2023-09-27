@@ -20,18 +20,12 @@
             type="number"
             placeholder=""
             v-model="form.price"
-            src="/icons/flag.svg"
-            v-maska="'## ### ## ##'"
-            :error="$v.price.$error"
         />
         <Input
             label="Karobka"
             type="count_in_box"
             placeholder=""
             v-model="form.count_in_box"
-            src="/icons/flag.svg"
-            v-maska="'## ### ## ##'"
-            :error="$v.count_in_box.$error"
         />
       </div>
       <div class="mt-3 flex justify-end">

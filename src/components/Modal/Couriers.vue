@@ -15,26 +15,26 @@
             :error="$v.fio.$error"
             v-model="form.fio"
         />
-          <Input
-              label="Telefon raqami"
-              type="phone"
-              placeholder=""
-              v-model="form.phone_number"
-              src="/icons/flag.svg"
-              v-maska="'## ### ## ##'"
-              :error="$v.phone_number.$error"
-          >+998</Input
-          >
-          <Input
-              label="Qo'shimcha telefon raqami"
-              type="phone"
-              placeholder=""
-              v-model="form.phone_number2"
-              src="/icons/flag.svg"
-              v-maska="'## ### ## ##'"
-              :error="$v.phone_number2.$error"
-          >+998</Input
-          >
+        <Input
+            label="Telefon raqami"
+            type="phone"
+            placeholder=""
+            v-model="form.phone_number"
+            src="/icons/flag.svg"
+            v-maska="'## ### ## ##'"
+            :error="$v.phone_number.$error"
+        >+998</Input
+        >
+        <Input
+            label="Qo'shimcha telefon raqami"
+            type="phone"
+            placeholder=""
+            v-model="form.phone_number2"
+            src="/icons/flag.svg"
+            v-maska="'## ### ## ##'"
+            :error="$v.phone_number2.$error"
+        >+998</Input
+        >
       </div>
       <div class="mt-3 flex justify-end">
         <VButton class="flex gap-2 group">
@@ -92,7 +92,6 @@ const validPhones = [
 
 const isValidPhone = (val: string) => {
   const phone = val.replace(/[\s)(-]/g, '')
-  console.log(phone)
   if (phone.length === 0) return true
   return phone.length === 9 && validPhones.includes(phone.substring(0, 2))
 }
@@ -125,6 +124,7 @@ const submitForm = async () => {
     }
     const response = await useApi[method](url, data)
     console.log(response)
+    x
     props.consumer.value = response
   }
   emit('close')
@@ -149,7 +149,7 @@ const watchShow = () => {
   }
 };
 
-const stopWatchingShow = watch(() => props.show, watchShow, { immediate: true });
+const stopWatchingShow = watch(() => props.show, watchShow, {immediate: true});
 
 onBeforeUnmount(() => {
   stopWatchingShow();

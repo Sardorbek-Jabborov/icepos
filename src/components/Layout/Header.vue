@@ -20,7 +20,6 @@ const user = useUserStore()
 const toast = useToast()
 
 const username = getItem('username')
-console.log(username)
 
 const router = useRouter()
 const logOut = () => {

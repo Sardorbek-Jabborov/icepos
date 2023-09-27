@@ -22,10 +22,10 @@ const router = createRouter({
         },
         {
             path: '/customers',
+            name: 'PCustomers',
             meta: {
                 layout: 'default'
             },
-            name: 'PCustomers',
             beforeEnter: [auth],
             component: () => import('@/views/PCustomers.vue'),
         },

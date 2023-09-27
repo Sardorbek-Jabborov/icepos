@@ -20,7 +20,6 @@ const fetchData = async () => {
     console.log(response.results)
     sponsors.data = response.results;
     sponsors.total = response.count;
-    console.log(sponsors.data)
   } catch (error) {
     console.error('Error fetching orders:', error);
   }

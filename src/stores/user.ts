@@ -7,11 +7,9 @@ export const useUserStore = defineStore('user', () => {
     const setUserName = (username: string) => {
         localStorage.setItem('username', user.value)
         user.value = username
-        console.log(user)
     }
     const getUserName = () => {
         const username = getItem('username')
-        console.log(username)
         return username
     }
 

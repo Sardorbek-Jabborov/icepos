@@ -135,10 +135,8 @@ const fetchData = async () => {
   loading.value = true
   try {
     const response = await useApi.get(`/consumers/?search=${search.value}&page=${currentPage.value}&page_size=${pageSize.value}`);
-    console.log(response.results)
     sponsors.data = response.results;
     sponsors.total = response.count;
-    console.log(sponsors.data)
   } catch (error) {
     console.error('Error fetching sponsors:', error);
   } finally {

@@ -62,13 +62,21 @@
       </div>
     </Transition>
     <div class="" v-if="!loading">
-      <div class="page-size flex items-center">
-        <label for="pageSize">Ko‘rsatish:</label>
-        <select v-model="pageSize" id="pageSize" @change="updatePageSize" class="rounded-xl border">
-          <option v-for="option in pageSizeOptions" :key="option" :value="option">
-            {{ option }}
-          </option>
-        </select>
+      <div class="page-size flex items-center justify-between">
+        <div>
+          <label for="pageSize">Ko‘rsatish:</label>
+          <select v-model="pageSize" id="pageSize" @change="updatePageSize" class="rounded-xl border">
+            <option v-for="option in pageSizeOptions" :key="option" :value="option">
+              {{ option }}
+            </option>
+          </select>
+        </div>
+        <vue-awesome-paginate
+            :total-items="sponsors.total"
+            :items-per-page="pageSize"
+            :max-pages-shown="5"
+            v-model="currentPage"
+        />
       </div>
     </div>
   </div>
@@ -85,6 +93,7 @@ import VButton from "@/components/Button/VButton.vue";
 import IconsSearch from "@/components/Icons/Search.vue";
 import IconsPlus from "@/components/Icons/Plus.vue";
 import IconsEdit from "@/components/Icons/Edit.vue";
+import {VueAwesomePaginate} from "vue-awesome-paginate";
 
 const route = useRoute()
 const router = useRouter()
@@ -138,9 +147,6 @@ watch([pageSize, currentPage], () => {
   fetchData();
 });
 
-const totalPages = computed(() => Math.ceil(sponsors.data.length / pageSize.value));
-
-
 const calculateOrder = (index) => {
   return (currentPage.value - 1) * pageSize.value + index + 1;
 };
@@ -155,8 +161,7 @@ const updatePageSize = () => {
 
 </script>
 
-<style scoped>
-
+<style>
 .pagination {
   display: flex;
   justify-content: center;
@@ -186,5 +191,36 @@ const updatePageSize = () => {
 
 .page-size select {
   padding: 0.5rem;
+}
+
+.pagination-container {
+  display: flex;
+  column-gap: 10px;
+}
+
+.paginate-buttons {
+  height: 40px;
+  width: 40px;
+  border-radius: 10px;
+  cursor: pointer;
+  background-color: #FFFFFF;
+  border: 1px solid rgb(217, 217, 217);
+  color: black;
+  transition: all 0.3s ease-in-out;
+}
+
+.paginate-buttons:hover {
+  background-color: #d8d8d8;
+}
+
+.active-page {
+  background-color: #3365FC;
+  border: 1px solid #3498db;
+  color: white;
+  transition: all 0.3s ease-in-out;
+}
+
+.active-page:hover {
+  background-color: #2988c8;
 }
 </style>

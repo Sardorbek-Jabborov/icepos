@@ -36,8 +36,8 @@
             :key="basketItem?.id"
         >
           <div class="w-full">
-            <p>Nomi: <span class="font-bold">{{ basketItem?.product.title }}</span></p>
-            <p>Qutidagi miqdori: <span class="font-bold">{{ basketItem?.product.count_in_box }} dona</span></p>
+            <p>Nomi: <span class="font-bold">{{ basketItem?.product?.title }}</span></p>
+            <p>Qutidagi miqdori: <span class="font-bold">{{ basketItem?.product?.count_in_box }} dona</span></p>
             <p>Narxi: <span class="font-bold">{{ basketItem?.product.price }} UZS</span></p>
             <p>Savatdagi miqdori: <span class="font-bold">{{ basketItem?.quantity }} dona</span></p>
             <div class="flex items-center gap-5 p-2 w-auto">

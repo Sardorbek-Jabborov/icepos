@@ -4,6 +4,8 @@ import {createApp} from 'vue'
 import {createPinia} from 'pinia'
 import Toast from "vue-toastification";
 import Maska from 'maska'
+import VueAwesomePaginate from "vue-awesome-paginate";
+import "vue-awesome-paginate/dist/style.css";
 import "vue-toastification/dist/index.css";
 import './assets/main.css'
 
@@ -32,4 +34,5 @@ app.use(createPinia())
 app.use(router)
 app.use(Toast, options);
 app.use(Maska)
+app.use(VueAwesomePaginate)
 app.mount('#app')

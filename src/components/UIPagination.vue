@@ -1,111 +1,197 @@
 <template>
-  <div
-      class="grid md:grid-cols-1-2max max-w-[1200px] mx-auto md:grid-rows-1 grid-cols-1-max grid-rows-2 justify-between text-black font-rubik text-15 items-center mt-6 gap-4"
-  >
-    <div class="flex items-center gap-3 col-start-2 row-start-1">
-      <label for="p_show">Ko'rsatish</label>
-      <select id="p_show" v-model="size" class="ui-input h-8 rounded-xl border" @change="setSize">
-        <option :value="i * 10" v-for="i in 10" :key="i">{{ i * 10 }}</option>
-      </select>
-    </div>
-
-    <div
-        class="flex gap-2 row-start-2 col-start-1 col-span-2 justify-center md:row-start-1 md:col-start-3"
+  <ul class="pagination flex items-center gap-2">
+    <li
+        v-if="paginationButtons"
+        :class="`${itemClass} ${hasLast ? disableClass : ''}`"
     >
-      <button
-          @click="setPage('prev')"
-          :disabled="page === 1"
-          :class="page === 1 ? 'disabled !bg-gray-blue !text-dark-silver' : ''"
-          class="ui-input pagination__item middle w-8 h-8 flex items-center justify-center"
-      >
+      <button :disabled="hasFirst" @click="prev">
         <svg
-            width="8"
-            height="12"
-            viewBox="0 0 8 12"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
         >
           <path
-              d="M7.87762 1.12747C8.03371 1.28355 8.03385 1.53658 7.87793 1.69284L3.86207 5.71747C3.70628 5.87361 3.70628 6.1264 3.86207 6.28253L7.87793 10.3072C8.03385 10.4634 8.03371 10.7164 7.87762 10.8725L7.033 11.7172C6.87679 11.8734 6.62352 11.8734 6.46731 11.7172L1.033 6.28284C0.876789 6.12663 0.87679 5.87337 1.033 5.71716L6.46731 0.282842C6.62352 0.126632 6.87679 0.126633 7.033 0.282843L7.87762 1.12747Z"
-              fill="#979797"
+              fill-rule="evenodd"
+              clip-rule="evenodd"
+              d="M13.8287 19C13.5367 19 13.2467 18.873 13.0487 18.627L8.22066 12.627C7.92266 12.256 7.92666 11.726 8.23166 11.36L13.2317 5.35998C13.5847 4.93598 14.2157 4.87898 14.6407 5.23198C15.0647 5.58498 15.1217 6.21598 14.7677 6.63998L10.2927 12.011L14.6077 17.373C14.9537 17.803 14.8857 18.433 14.4547 18.779C14.2707 18.928 14.0487 19 13.8287 19Z"
+              fill="#376480"
           />
+          <mask
+              id="mask0_1209_20547"
+              style="mask-type: alpha"
+              maskUnits="userSpaceOnUse"
+              x="8"
+              y="5"
+              width="7"
+              height="14"
+          >
+            <path
+                fill-rule="evenodd"
+                clip-rule="evenodd"
+                d="M13.8287 19C13.5367 19 13.2467 18.873 13.0487 18.627L8.22066 12.627C7.92266 12.256 7.92666 11.726 8.23166 11.36L13.2317 5.35998C13.5847 4.93598 14.2157 4.87898 14.6407 5.23198C15.0647 5.58498 15.1217 6.21598 14.7677 6.63998L10.2927 12.011L14.6077 17.373C14.9537 17.803 14.8857 18.433 14.4547 18.779C14.2707 18.928 14.0487 19 13.8287 19Z"
+                fill="white"
+            />
+          </mask>
+          <g mask="url(#mask0_1209_20547)"></g>
         </svg>
       </button>
-      <button
-          v-for="p in pages - 2 > page ? 2 : 4"
-          :key="p"
-          @click="setPage(page + p - 1)"
-          :class="page + p - 1 === page ? 'active' : ''"
-          class="ui-input pagination__item middle"
-      >
-        {{ page + p - 1 }}
+    </li>
+
+    <li
+        v-for="page in items"
+        :key="page.label"
+        :class="`${itemClass} ${page.active ? activeClass : ''} ${
+          page.disable ? disableClass : ''
+        }`"
+    >
+        <span
+            v-if="page.disable"
+            class="w-full h-full flex items-center justify-center"
+        >
+          ...
+        </span>
+      <button v-else class="w-full h-full" @click="goto(page.label)">
+        {{ page.label }}
       </button>
-      <div v-if="pages - 2 > page" class="ui-input pagination__item middle">...</div>
-      <button
-          v-if="pages - 2 > page"
-          @click="setPage(pages)"
-          :class="pages === page ? 'active' : ''"
-          class="ui-input pagination__item middle"
-      >
-        {{ pages }}
-      </button>
-      <button
-          @click="setPage('next')"
-          :disabled="page === pages"
-          :class="page === pages ? 'disabled !bg-gray-blue !text-dark-silver' : ''"
-          class="ui-input pagination__item middle flex items-center justify-center"
-      >
+    </li>
+
+    <li
+        v-if="paginationButtons"
+        :class="`${itemClass} ${hasLast ? disableClass : ''}`"
+    >
+      <button :disabled="hasLast" @click="next">
         <svg
-            width="8"
-            height="12"
-            viewBox="0 0 8 12"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
         >
           <path
-              d="M0.122378 1.12747C-0.0337111 1.28355 -0.0338491 1.53658 0.12207 1.69284L4.13793 5.71747C4.29372 5.87361 4.29372 6.1264 4.13793 6.28253L0.12207 10.3072C-0.0338493 10.4634 -0.0337111 10.7164 0.122378 10.8725L0.967001 11.7172C1.12321 11.8734 1.37648 11.8734 1.53269 11.7172L6.967 6.28284C7.12321 6.12663 7.12321 5.87337 6.967 5.71716L1.53269 0.282842C1.37648 0.126632 1.12321 0.126633 0.967001 0.282843L0.122378 1.12747Z"
-              fill="#C4CDD5"
+              fill-rule="evenodd"
+              clip-rule="evenodd"
+              d="M9.9995 19.0001C9.7735 19.0001 9.5465 18.9241 9.3595 18.7681C8.9355 18.4151 8.8785 17.7841 9.2315 17.3601L13.7075 11.9891L9.3925 6.62707C9.0465 6.19707 9.1145 5.56707 9.5445 5.22107C9.9755 4.87507 10.6045 4.94307 10.9515 5.37307L15.7795 11.3731C16.0775 11.7441 16.0735 12.2741 15.7685 12.6401L10.7685 18.6401C10.5705 18.8771 10.2865 19.0001 9.9995 19.0001Z"
+              fill="#376480"
           />
+          <mask
+              id="mask0_1209_20559"
+              style="mask-type: alpha"
+              maskUnits="userSpaceOnUse"
+              x="9"
+              y="5"
+              width="8"
+              height="14"
+          >
+            <path
+                fill-rule="evenodd"
+                clip-rule="evenodd"
+                d="M9.9995 19.0001C9.7735 19.0001 9.5465 18.9241 9.3595 18.7681C8.9355 18.4151 8.8785 17.7841 9.2315 17.3601L13.7075 11.9891L9.3925 6.62707C9.0465 6.19707 9.1145 5.56707 9.5445 5.22107C9.9755 4.87507 10.6045 4.94307 10.9515 5.37307L15.7795 11.3731C16.0775 11.7441 16.0735 12.2741 15.7685 12.6401L10.7685 18.6401C10.5705 18.8771 10.2865 19.0001 9.9995 19.0001Z"
+                fill="white"
+            />
+          </mask>
+          <g mask="url(#mask0_1209_20559)"></g>
         </svg>
       </button>
-    </div>
-  </div>
+    </li>
+  </ul>
 </template>
-
 <script setup lang="ts">
-import {ref} from '@vue/reactivity'
-import {computed} from '@vue/runtime-core'
-import {useRoute, useRouter} from 'vue-router'
+import {computed, onMounted, watch} from "vue";
 
-const props = defineProps<{ total: number }>()
-const route = useRoute()
-const router = useRouter()
-
-const size = ref(+route.query.size! || 10)
-const page = ref(+route.query.page! || 1)
-
-const setSize = () => {
-  router.push({...route, query: {...route.query, size: size.value}})
+interface Props {
+  currentPage: number;
+  total: number;
+  limit: number;
+  itemClass?: string;
+  activeClass?: string;
+  disableClass?: string;
+  paginationButtons?: boolean;
 }
 
-const setPage = (p: number | 'next' | 'prev') => {
-  if (typeof p === 'number') page.value = p
-  if (p === 'prev') page.value--
-  if (p === 'next') page.value++
-  router.push({...route, query: {...route.query, page: page.value}})
+const props = withDefaults(defineProps<Props>(), {
+  itemClass:
+      "text-gray border border-gray rounded-md w-8 h-8 flex-center transition-300 hover:!bg-blue-50 hover:!border-transparent hover:!text-blue",
+  activeClass: "!bg-blue-50 !border-transparent !text-blue",
+});
+const emit = defineEmits(["change", "input"]);
+const pageCount = computed(() => Math.ceil(props.total / props.limit));
+const items = computed(() => {
+  const valPrev = props.currentPage > 1 ? props.currentPage - 1 : 1; // for easier navigation - gives one previous page
+  const valNext =
+      props.currentPage < pageCount.value
+          ? props.currentPage + 1
+          : pageCount.value; // one next page
+  const extraPrev = valPrev === 3 ? 2 : null;
+  const extraNext =
+      valNext === pageCount.value - 2 ? pageCount.value - 1 : null;
+  const dotsBefore = valPrev > 3 ? 2 : null;
+  const dotsAfter = valNext < pageCount.value - 2 ? pageCount.value - 1 : null;
+  const output = [];
+  for (let i = 1; i <= pageCount.value; i += 1) {
+    if (
+        [
+          1,
+          pageCount.value,
+          props.currentPage,
+          valPrev,
+          valNext,
+          extraPrev,
+          extraNext,
+          dotsBefore,
+          dotsAfter,
+        ].includes(i)
+    ) {
+      output.push({
+        label: i,
+        active: props.currentPage === i,
+        disable: [dotsBefore, dotsAfter].includes(i),
+      });
+    }
+  }
+  return output;
+});
+const hasFirst = computed(() => props.currentPage === 1);
+const hasLast = computed(() => props.currentPage === pageCount.value);
+watch(
+    () => props.currentPage,
+    () => {
+      emit("change");
+    }
+);
+
+function first() {
+  if (!hasFirst.value) {
+    emit("input", 1);
+  }
 }
 
-const pages = computed(() => {
-  return Math.ceil(props.total / size.value)
-})
+function prev() {
+  if (!hasFirst.value) {
+    emit("input", props.currentPage - 1);
+  }
+}
+
+function goto(page: number) {
+  emit("input", page);
+}
+
+function next() {
+  if (!hasLast.value) {
+    emit("input", props.currentPage + 1);
+  }
+}
+
+function last() {
+  if (!hasLast.value) {
+    emit("input", pageCount.value);
+  }
+}
+
+onMounted(() => {
+  if (props.currentPage > pageCount.value) {
+    emit("change");
+  }
+});
 </script>
-
-<style scoped>
-.pagination__item {
-  @apply w-8 h-8 font-medium text-sm transition-colors duration-100;
-}
-
-.pagination__item:hover,
-.pagination__item.active {
-}
-</style>

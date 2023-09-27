@@ -75,7 +75,12 @@
           </select>
         </div>
         <div>
-          <UIPagination :total-pages="sponsors.total"/>
+          <vue-awesome-paginate
+              :total-items="sponsors.total"
+              :items-per-page="pageSize"
+              :max-pages-shown="3"
+              v-model="currentPage"
+          />
         </div>
       </div>
     </div>
@@ -94,6 +99,7 @@ import IconsEdit from "@/components/Icons/Edit.vue";
 import IconsSearch from "@/components/Icons/Search.vue";
 import ModalCustomers from "@/components/Modal/Customers.vue";
 import Table from '@/components/CTable.vue'
+import {VueAwesomePaginate} from "vue-awesome-paginate";
 
 const route = useRoute()
 const router = useRouter()
@@ -164,8 +170,7 @@ const updatePageSize = () => {
 
 </script>
 
-<style scoped>
-
+<style>
 .pagination {
   display: flex;
   justify-content: center;
@@ -195,5 +200,36 @@ const updatePageSize = () => {
 
 .page-size select {
   padding: 0.5rem;
+}
+
+.pagination-container {
+  display: flex;
+  column-gap: 10px;
+}
+
+.paginate-buttons {
+  height: 40px;
+  width: 40px;
+  border-radius: 10px;
+  cursor: pointer;
+  background-color: #FFFFFF;
+  border: 1px solid rgb(217, 217, 217);
+  color: black;
+  transition: all 0.3s ease-in-out;
+}
+
+.paginate-buttons:hover {
+  background-color: #d8d8d8;
+}
+
+.active-page {
+  background-color: #3365FC;
+  border: 1px solid #3498db;
+  color: white;
+  transition: all 0.3s ease-in-out;
+}
+
+.active-page:hover {
+  background-color: #2988c8;
 }
 </style>

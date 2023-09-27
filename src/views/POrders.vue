@@ -58,9 +58,12 @@
             </option>
           </select>
         </div>
-        <div>
-          <UIPagination :total-pages="sponsors.total"/>
-        </div>
+        <vue-awesome-paginate
+            :total-items="sponsors.total"
+            :items-per-page="pageSize"
+            :max-pages-shown="3"
+            v-model="currentPage"
+        />
       </div>
     </div>
   </div>
@@ -72,10 +75,10 @@ import {onMounted, ref, reactive, watch, computed} from 'vue';
 import {useRoute} from "vue-router";
 import {useRouter} from "vue-router";
 import Table from '@/components/CTable.vue'
-import UIPagination from "@/components/UIPagination.vue";
 import VButton from "@/components/Button/VButton.vue";
 import IconsSearch from "@/components/Icons/Search.vue";
 import IconsPlus from "@/components/Icons/Plus.vue";
+import {VueAwesomePaginate} from "vue-awesome-paginate";
 
 const route = useRoute()
 const router = useRouter()
@@ -146,8 +149,7 @@ const updatePageSize = () => {
 
 </script>
 
-<style scoped>
-
+<style>
 .pagination {
   display: flex;
   justify-content: center;
@@ -177,5 +179,36 @@ const updatePageSize = () => {
 
 .page-size select {
   padding: 0.5rem;
+}
+
+.pagination-container {
+  display: flex;
+  column-gap: 10px;
+}
+
+.paginate-buttons {
+  height: 40px;
+  width: 40px;
+  border-radius: 10px;
+  cursor: pointer;
+  background-color: #FFFFFF;
+  border: 1px solid rgb(217, 217, 217);
+  color: black;
+  transition: all 0.3s ease-in-out;
+}
+
+.paginate-buttons:hover {
+  background-color: #d8d8d8;
+}
+
+.active-page {
+  background-color: #3365FC;
+  border: 1px solid #3498db;
+  color: white;
+  transition: all 0.3s ease-in-out;
+}
+
+.active-page:hover {
+  background-color: #2988c8;
 }
 </style>

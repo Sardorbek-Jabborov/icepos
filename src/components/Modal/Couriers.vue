@@ -128,7 +128,7 @@ const submitForm = async () => {
     props.consumer.value = response
   }
   emit('close')
-  window.location.reload()w
+  window.location.reload()
 }
 
 

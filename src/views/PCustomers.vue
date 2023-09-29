@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <div class="">
+    <div>
       <div v-if="loading" class="absolute animate-ping top-1/3 left-1/2 bg-gray-800 rounded-full h-20 w-20">
       </div>
       <div class="mt-5 flex justify-between">
@@ -40,7 +40,6 @@
           <td class="!w-max">{{ sponsor?.phone_number2 }}</td>
           <td class="!w-max">{{ sponsor?.depts }} uzs</td>
           <td class="!w-max">{{ sponsor?.created_at }}</td>
-
           <td>
             <button class="text-xl text-primary" @click="toggleModal(sponsor)">
               <IconsEdit class="w-6 h-6 text-[#3365FC] hover:text-black-100 duration-300"/>
@@ -84,6 +83,10 @@
         </div>
       </div>
     </div>
+    <div>
+      <datepicker @change="logs()" :value="state.from_date"></datepicker>
+      <VButton @click="logs">show</VButton>
+    </div>
   </div>
 </template>
 
@@ -99,6 +102,7 @@ import IconsEdit from "@/components/Icons/Edit.vue";
 import IconsSearch from "@/components/Icons/Search.vue";
 import ModalCustomers from "@/components/Modal/Customers.vue";
 import Table from '@/components/CTable.vue'
+import Datepicker from 'vuejs3-datepicker';
 import {VueAwesomePaginate} from "vue-awesome-paginate";
 
 const route = useRoute()
@@ -129,6 +133,14 @@ function onClickOutside(event) {
 const toggleModal = (sponsor) => {
   current_consumer.value = sponsor
   showModal.value = !showModal.value
+}
+
+const state = reactive({
+  from_date: new Date(),
+});
+
+const logs = () => {
+  console.log(state.from_date)
 }
 
 const fetchData = async () => {

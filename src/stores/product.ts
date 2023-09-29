@@ -9,7 +9,6 @@ export const useProductStore = defineStore('product', () => {
     const products = ref([])
     const productLabels = ref<string[]>([])
     const productCount = ref<number[]>([])
-    const slug = ref<string>('product')
 
     const addProduct = async (product: any, callback: any = null): Promise<void> => {
         const response = await useApi.post("/products/", {
@@ -33,27 +32,9 @@ export const useProductStore = defineStore('product', () => {
             callback(response);
     }
 
-    const editStatusProduct = async (product: any): Promise<void> => {
-
-        toast.success("Turkum xarakteristikasi o'zgartirildi")
-    }
-
-    const getProduct = async (): Promise<void> => {
-
-    }
-
     const getProductAll = async (search: string, currentPage: number, pageSize: number, ) => {
         const response = await useApi.get(`/products/?search=${search}&page=${currentPage}&page_size=${pageSize}`);
         return response
-    }
-
-    const removeProduct = async (id: number): Promise<void> => {
-
-        toast.warning("Mahsulot o'chirildi")
-    }
-
-    const getOneProduct = async (id: number) => {
-
     }
 
     return {
@@ -62,11 +43,7 @@ export const useProductStore = defineStore('product', () => {
         productCount,
 
         addProduct,
-        getProduct,
         getProductAll,
         editProduct,
-        getOneProduct,
-        removeProduct,
-        editStatusProduct,
     }
 })

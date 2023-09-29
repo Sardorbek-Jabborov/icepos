@@ -149,11 +149,11 @@ onMounted(() => {
   fetchData()
 })
 
-const updateQuantity = (item) => {
-  let newValue = Math.max(0, parseInt(item.quantity, 10) || 0);
+const updateQuantity = (item: any) => {
+  let newValue = Math.max(1, parseInt(item.quantity, 10) || 1);
   item.quantity = newValue.toString().slice(0, 5);
   for (let i = 0; i < basket.basket.productId.length; i++) {
-    if (basket.basket.productId[i].product == item.product.id) {
+    if (basket.basket.productId[i].product === item.product.id) {
       basket.basket.productId[i].quantity = newValue;
     }
   }
@@ -204,19 +204,6 @@ const totalPrice = computed(() => {
     return total + (basketItem.product.price * basketItem.quantity);
   }, 0);
 });
-
-// const addToBasket = (id: number) => {
-//   const item = products.data.find((el) => el.id == id);
-//   const existingItem = basket.products.find((basketItem) => basketItem.product.id === id);
-//   if (existingItem) {
-//     existingItem.quantity += 1;
-//   } else {
-//     basket.products.push({
-//       "product": item,
-//       "quantity": 1,
-//     });
-//   }
-// };
 const addToBasket = (item) => {
   basket.addToBasket(item);
 };

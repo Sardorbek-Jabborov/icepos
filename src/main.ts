@@ -5,10 +5,10 @@ import {createPinia} from 'pinia'
 import Toast from "vue-toastification";
 import Maska from 'maska'
 import VueAwesomePaginate from "vue-awesome-paginate";
+
 import "vue-awesome-paginate/dist/style.css";
 import "vue-toastification/dist/index.css";
 import './assets/main.css'
-
 
 import App from './App.vue'
 import router from './router'

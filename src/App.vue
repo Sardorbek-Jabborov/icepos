@@ -30,15 +30,13 @@ const detectLayout = computed(() => {
   return layouts[route.meta.layout as string]
 })
 
-onMounted( () => {
+onMounted(() => {
   if (auth.isAuthenticated) {
     useApi.get('/user-detail/')
         .then((res) => {
-          console.dir(res)
         })
         .catch((error) => {
           auth.logOut()
-          // router.push("/")
           console.log("error", error)
         })
   }

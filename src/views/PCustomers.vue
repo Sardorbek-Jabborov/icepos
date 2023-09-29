@@ -83,10 +83,6 @@
         </div>
       </div>
     </div>
-    <div>
-      <datepicker @change="logs()" :value="state.from_date"></datepicker>
-      <VButton @click="logs">show</VButton>
-    </div>
   </div>
 </template>
 
@@ -102,7 +98,6 @@ import IconsEdit from "@/components/Icons/Edit.vue";
 import IconsSearch from "@/components/Icons/Search.vue";
 import ModalCustomers from "@/components/Modal/Customers.vue";
 import Table from '@/components/CTable.vue'
-import Datepicker from 'vuejs3-datepicker';
 import {VueAwesomePaginate} from "vue-awesome-paginate";
 
 const route = useRoute()
@@ -133,14 +128,6 @@ function onClickOutside(event) {
 const toggleModal = (sponsor) => {
   current_consumer.value = sponsor
   showModal.value = !showModal.value
-}
-
-const state = reactive({
-  from_date: new Date(),
-});
-
-const logs = () => {
-  console.log(state.from_date)
 }
 
 const fetchData = async () => {

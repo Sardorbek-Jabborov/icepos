@@ -1,8 +1,88 @@
 <template>
   <div class="container py-5">
-    <CCheck/>
+    <div class="mt-5 flex gap-4">
+      <datepicker v-model="state.from_date"></datepicker>
+      <datepicker v-model="state.to_date"></datepicker>
+      <VButton class="flex group items-center gap-2" @click="fetchData()">
+        <IconsFilter class="text-white group-hover:text-blue-300 w-4 h-4 duration-300"/>
+        <span>Filter</span>
+      </VButton>
+    </div>
+    <VueApexCharts
+        type="bar"
+        height="400"
+        :options="chartOptions"
+        :series="chartSeries"
+    ></VueApexCharts>
   </div>
 </template>
 <script setup lang="ts">
-import CCheck from "@/components/CCheck.vue";
+import VueApexCharts from "vue3-apexcharts";
+import {useApi} from "@/helpers/axios";
+import {computed, onMounted, reactive} from "vue";
+import Datepicker from 'vuejs3-datepicker';
+import VButton from "@/components/Button/VButton.vue";
+import IconsFilter from "@/components/Icons/Filter.vue";
+
+const stats = reactive({
+  data: {
+    results: []
+  },
+});
+
+const state = reactive({
+  from_date: new Date(2023, 8, 1),
+  to_date: new Date(),
+});
+
+const chartSeries = computed(() => {
+  return (
+      stats.data?.results?.map((item) => {
+        return {
+          name: item.title,
+          data: [item.total_orders],
+        };
+      }) || []
+  );
+});
+
+// ApexCharts options
+const chartOptions = {
+  chart: {
+    type: "bar",
+  },
+  xaxis: {
+    categories: chartSeries.value.map((item) => item.name),
+  },
+};
+
+const formatDate = (date) => {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+};
+
+const formatDates = () => {
+  const fromDateFormatted = formatDate(state?.from_date);
+  const toDateFormatted = formatDate(state?.to_date);
+  return {fromDateFormatted, toDateFormatted}
+};
+
+
+
+const getStats = async () => {
+  const date = formatDates()
+  try {
+    const response = await useApi.get(`/most-sold-products/?from_date=${date.fromDateFormatted}&to_date=${date.toDateFormatted}&products_count=10`);
+    stats.data.results = response.results;
+    console.log(response.results);
+  } catch (error) {
+    console.error("Error fetching data:", error);
+  }
+};
+
+onMounted(() => {
+  getStats();
+});
 </script>

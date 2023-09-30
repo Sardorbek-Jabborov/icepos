@@ -10,7 +10,7 @@ export const useBasketStore = defineStore('basket', () => {
         products: [],
         productId: [],
     });
-
+    const check = ref()
     const addToBasket = (item: { id: any; }) => {
         onlyByID(item)
         const existingItem = basket.products.find((basketItem) => basketItem.product.id === item.id);
@@ -57,7 +57,8 @@ export const useBasketStore = defineStore('basket', () => {
             "products": products,
             "full_paid": full_paid || false,
             "price_paid": price_paid || 0
-        }).then(() => {
+        }).then((res) => {
+            check.value = res
             basket.products = []
             basket.productId = []
             toast.success("Buyurtma yaratildi!")
@@ -79,6 +80,7 @@ export const useBasketStore = defineStore('basket', () => {
 
     return {
         basket,
+        check,
         addToBasket,
         removeItem,
         createOrder

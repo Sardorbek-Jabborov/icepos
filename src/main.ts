@@ -5,6 +5,7 @@ import {createPinia} from 'pinia'
 import Toast from "vue-toastification";
 import Maska from 'maska'
 import VueAwesomePaginate from "vue-awesome-paginate";
+import VueApexCharts from "vue3-apexcharts";
 
 import "vue-awesome-paginate/dist/style.css";
 import "vue-toastification/dist/index.css";
@@ -30,6 +31,7 @@ const options = {
 
 const app = createApp(App)
 
+app.use(VueApexCharts)
 app.use(createPinia())
 app.use(router)
 app.use(Toast, options);

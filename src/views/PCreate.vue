@@ -124,6 +124,8 @@ const consumers = reactive({"data": []})
 
 const couriers = reactive({"data": []})
 
+const check = ref()
+
 const products = reactive({
   "data": []
 })
@@ -160,15 +162,18 @@ const updateQuantity = (item: any) => {
 };
 
 
-const createOrder = () => {
-  basket.createOrder(selectedCourier.value, selectedConsumer.value, basket.basket.productId, fullPaid.value, paidPrice.value)
-  console.log({
-    "courier": selectedCourier.value,
-    "consumer": selectedConsumer.value,
-    "products": basket.basket.productId,
-    "full_paid": fullPaid.value,
-    "price_paid": paidPrice.value
-  })
+const createOrder = async () => {
+  await basket.createOrder(selectedCourier.value, selectedConsumer.value, basket.basket.productId, fullPaid.value, paidPrice.value)
+  check.value = basket.check
+  console.log(check.value)
+  // console.log(res)
+  // console.log({
+  //   "courier": selectedCourier.value,
+  //   "consumer": selectedConsumer.value,
+  //   "products": basket.basket.productId,
+  //   "full_paid": fullPaid.value,
+  //   "price_paid": paidPrice.value
+  // })
 }
 
 async function load_page() {

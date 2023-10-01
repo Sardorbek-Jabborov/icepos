@@ -38,7 +38,7 @@
           </td>
           <td class="!w-max">{{ sponsor?.phone_number }}</td>
           <td class="!w-max">{{ sponsor?.phone_number2 }}</td>
-          <td class="!w-max">{{ sponsor?.depts }} uzs</td>
+          <td class="!w-max">{{ sponsor?.debts }} uzs</td>
           <td class="!w-max">{{ sponsor?.created_at }}</td>
           <td>
             <button class="text-xl text-primary" @click="toggleModal(sponsor)">
@@ -58,6 +58,7 @@
         <ModalCustomers
             class="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50 sm:max-w-[587px] w-[70%] sm:w-full modal-content"
             @close="toggleModal"
+            @submitted="submitted"
             :show="showModal"
             :consumer="current_consumer"
         />
@@ -128,6 +129,11 @@ function onClickOutside(event) {
 const toggleModal = (sponsor) => {
   current_consumer.value = sponsor
   showModal.value = !showModal.value
+}
+
+const submitted = () => {
+  toggleModal()
+  fetchData()
 }
 
 const fetchData = async () => {

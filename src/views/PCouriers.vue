@@ -56,6 +56,7 @@
         <ModalCouriers
             class="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50 sm:max-w-[587px] w-[70%] sm:w-full modal-content"
             @close="toggleModal"
+            @submitted="submitted"
             :show="showModal"
             :consumer="current_courier"
         />
@@ -137,6 +138,12 @@ const fetchData = async () => {
     loading.value = false
   }
 }
+
+const submitted = () => {
+  toggleModal()
+  fetchData()
+}
+
 onMounted(() => {
   fetchData()
 })

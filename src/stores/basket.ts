@@ -50,33 +50,30 @@ export const useBasketStore = defineStore('basket', () => {
         }
     };
 
-    const createOrder = (courierId: any, consumerId: any, products: any, full_paid: boolean, price_paid: any) => {
-        useApi.post('/orders/', {
-            "courier": courierId,
-            "consumer": consumerId,
-            "products": products,
-            "full_paid": full_paid || false,
-            "price_paid": price_paid || 0
-        }).then((res) => {
-            check.value = res
-            basket.products = []
-            basket.productId = []
-            toast.success("Buyurtma yaratildi!")
-        })
-            .catch((error) => {
-                console.log(error)
-                if (error.response.status === 400) {
-                    console.log("Working....")
-                    console.log(error.response.data)
-                    for (const [key, value] of Object.entries(error.response.data)) {
-                        toast.error(value)
-                    }
-
-                } else {
-                    toast.error("Buyurtma yaratishda xatolik yuz berdi!1")
+    const createOrder = async (courierId, consumerId, products, full_paid, price_paid) => {
+        try {
+            return await useApi.post('/orders/', {
+                courier: courierId,
+                consumer: consumerId,
+                products: products,
+                full_paid: full_paid || false,
+                price_paid: price_paid || 0,
+            });
+        } catch (error) {
+            console.log(error);
+            if (error.response.status === 400) {
+                console.log("Working....");
+                console.log(error.response.data);
+                for (const [key, value] of Object.entries(error.response.data)) {
+                    toast.error(value);
                 }
-            })
-    }
+            } else {
+                toast.error("Buyurtma yaratishda xatolik yuz berdi!1");
+            }
+
+            throw error; // Rethrow the error to indicate failure
+        }
+    };
 
     return {
         basket,

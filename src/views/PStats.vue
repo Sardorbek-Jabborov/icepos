@@ -3,9 +3,12 @@
     <div class="mt-5 flex gap-4">
       <datepicker v-model="state.from_date"></datepicker>
       <datepicker v-model="state.to_date"></datepicker>
-      <VButton class="flex group items-center gap-2" @click="fetchData()">
+      <VButton class="flex group items-center gap-2" @click="getStats()">
         <IconsFilter class="text-white group-hover:text-blue-300 w-4 h-4 duration-300"/>
         <span>Filter</span>
+      </VButton>
+      <VButton @click="showChart">
+        ShowChart
       </VButton>
     </div>
     <VueApexCharts
@@ -36,25 +39,31 @@ const state = reactive({
 });
 
 const chartSeries = computed(() => {
-  return (
-      stats.data?.results?.map((item) => {
-        return {
-          name: item.title,
-          data: [item.total_orders],
-        };
-      }) || []
-  );
+  const resultData = stats.data?.results;
+  if (!resultData) return [];
+  const data = resultData.map((item) => item.total_orders);
+  return [
+    {
+      name: "Total Orders",
+      data: data,
+    },
+  ];
 });
 
-// ApexCharts options
 const chartOptions = {
   chart: {
     type: "bar",
   },
   xaxis: {
-    categories: chartSeries.value.map((item) => item.name),
+    categories: stats.data?.results?.map((item) => item.title) || [],
   },
 };
+
+function showChart() {
+  console.log(chartSeries.value)
+  console.log(chartOptions.value)
+}
+
 
 const formatDate = (date) => {
   const year = date.getFullYear();
@@ -68,7 +77,6 @@ const formatDates = () => {
   const toDateFormatted = formatDate(state?.to_date);
   return {fromDateFormatted, toDateFormatted}
 };
-
 
 
 const getStats = async () => {

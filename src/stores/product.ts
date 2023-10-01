@@ -14,7 +14,8 @@ export const useProductStore = defineStore('product', () => {
         const response = await useApi.post("/products/", {
             title: product.title,
             price: product.price,
-            count_in_box: product.count_in_box
+            count_in_box: product.count_in_box,
+            stock_quantity: product.stock_quantity
         })
         toast.success("Yangi mahsulot qo'shildi")
         if (callback)
@@ -25,7 +26,8 @@ export const useProductStore = defineStore('product', () => {
         const response = await useApi.put(`/products/${id}/`, {
             title: product.title,
             price: product.price,
-            count_in_box: product.count_in_box
+            count_in_box: product.count_in_box,
+            stock_quantity: product.stock_quantity
         })
         toast.success("Mahsulot yangilandi")
         if (callback)

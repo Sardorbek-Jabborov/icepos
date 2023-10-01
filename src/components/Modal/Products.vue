@@ -23,9 +23,15 @@
         />
         <Input
             label="Karobka"
-            type="count_in_box"
+            type="number"
             placeholder=""
             v-model="form.count_in_box"
+        />
+        <Input
+            label="Qoldiq"
+            type="number"
+            placeholder=""
+            v-model="form.stock_quantity"
         />
       </div>
       <div class="mt-3 flex justify-end">
@@ -62,12 +68,14 @@ interface IContactForm {
   title?: string
   price?: number
   count_in_box?: number
+  stock_quantity?: number
 }
 
 const form = reactive<IContactForm>({
   title: props.object?.title,
   price: props.object?.price,
   count_in_box: props.object?.count_in_box,
+  stock_quantity: props.object?.stock_quantity,
 })
 
 const rules = {
@@ -78,6 +86,9 @@ const rules = {
     required,
   },
   count_in_box: {
+    required,
+  },
+  stock_quantity: {
     required,
   }
 }

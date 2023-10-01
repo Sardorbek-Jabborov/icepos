@@ -8,9 +8,10 @@
         <div class="flex flex-col gap-2">
           <select name="customers" class="border border-gray-600 rounded- md p-2 h-[50px] rounded-md" v-model="status">
             <option disabled selected value="">Tanlang:</option>
-            <option>new</option>
-            <option>in_process</option>
-            <option>completed</option>
+            <option value="in_process">Jarayonda</option>
+            <option value="delivery">Yetkazib berish</option>
+            <option value="completed">Yakunlandi</option>
+            <option value="canceled">Bekor qilindi</option>
           </select>
         </div>
         <VButton class="flex group items-center gap-2" @click="fetchData()">
@@ -120,7 +121,7 @@ const fetchData = async () => {
   loading.value = true
   const date = formatDates()
   try {
-    const response = await useApi.get(`/orders/?created_at__gte=${date.fromDateFormatted}&created_at__lte=${date.toDateFormatted}&status=${status.value}&search=${search.value}&&page=${currentPage.value}&page_size=${pageSize.value}`)
+    const response = await useApi.get(`/orders/?created_at__date__gte=${date.fromDateFormatted}&created_at__date__lte=${date.toDateFormatted}&status=${status.value}&search=${search.value}&&page=${currentPage.value}&page_size=${pageSize.value}`)
     sponsors.data = response.results;
     sponsors.total = response.count;
     console.log(sponsors.data)

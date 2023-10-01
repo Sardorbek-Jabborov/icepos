@@ -44,6 +44,9 @@
             <button class="text-xl text-primary" @click="toggleModal(sponsor)">
               <IconsEdit class="w-6 h-6 text-[#3365FC] hover:text-black-100 duration-300"/>
             </button>
+            <button class="text-xl text-primary" @click="go_consumer_orders(sponsor)">
+              <i class="fas fa-edit">=></i>
+            </button>
           </td>
         </tr>
       </template>
@@ -134,6 +137,9 @@ const toggleModal = (sponsor) => {
 const submitted = () => {
   toggleModal()
   fetchData()
+}
+const go_consumer_orders = (sponsor) => {
+  router.push('/orders?consumer=' + sponsor.id)
 }
 
 const fetchData = async () => {

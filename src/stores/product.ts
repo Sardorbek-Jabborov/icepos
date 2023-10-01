@@ -18,7 +18,7 @@ export const useProductStore = defineStore('product', () => {
         })
         toast.success("Yangi mahsulot qo'shildi")
         if (callback)
-            callback(response);
+            callback();
     }
 
     const editProduct = async (product: any, id: Number, callback: any = null) => {
@@ -27,9 +27,9 @@ export const useProductStore = defineStore('product', () => {
             price: product.price,
             count_in_box: product.count_in_box
         })
-        toast.info("Mahsulot yangilandi")
+        toast.success("Mahsulot yangilandi")
         if (callback)
-            callback(response);
+            callback();
     }
 
     const getProductAll = async (search: string, currentPage: number, pageSize: number, ) => {

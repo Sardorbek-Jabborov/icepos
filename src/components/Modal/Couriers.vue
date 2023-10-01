@@ -54,7 +54,8 @@ import VButton from "@/components/Button/VButton.vue";
 import Input from "@/components/Input/Input.vue";
 import IconsClose from "@/components/Icons/Close.vue"
 import IconsSave from "@/components/Icons/Save.vue";
-
+import {useToast} from "vue-toastification";
+const toast = useToast()
 const props = defineProps<Props>()
 
 interface Props {
@@ -91,6 +92,7 @@ const validPhones = [
 ]
 
 const isValidPhone = (val: string) => {
+  if (!val) return true
   const phone = val.replace(/[\s)(-]/g, '')
   if (phone.length === 0) return true
   return phone.length === 9 && validPhones.includes(phone.substring(0, 2))
@@ -109,7 +111,7 @@ const rules = {
 }
 
 const $v = useVuelidate<IContactForm>(rules, form)
-const emit = defineEmits(['open', 'close'])
+const emit = defineEmits(['open', 'close', 'submitted'])
 const submitForm = async () => {
   $v.value.$touch()
   if ($v.value.$invalid) {
@@ -117,18 +119,24 @@ const submitForm = async () => {
   } else {
     const url = props.consumer?.id ? `/couriers/${props.consumer.id}/` : '/couriers/'
     const method = props.consumer?.id ? 'put' : 'post'
-    const data = {
+    let data = {
       fio: form.fio,
       phone_number: `+998${form.phone_number}`,
-      phone_number2: `+998${form.phone_number2}`,
+      phone_number2: null
+    }
+    if (form.phone_number2) {
+      data["phone_number2"] = `+998${form.phone_number2}`
     }
     const response = await useApi[method](url, data)
-    console.log(response)
-    x
     props.consumer.value = response
+    if (props.consumer?.id)
+      toast.success('Muvaffaqiyatli saqlandi')
+    else {
+      toast.success('Muvaffaqiyatli qo\'shildi')
+    }
+    emit('submitted')
+    
   }
-  emit('close')
-  window.location.reload()
 }
 
 

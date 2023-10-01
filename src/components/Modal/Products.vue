@@ -99,7 +99,6 @@ const submitForm = async () => {
       store.editProduct(form, props.object.id, () => emit("submitted"))
     }
   }
-  emit('close')
   // window.location.reload()
 }
 

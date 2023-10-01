@@ -13,10 +13,6 @@
           <IconsFilter class="text-white group-hover:text-blue-300 w-4 h-4 duration-300"/>
           <span>Filter</span>
         </VButton>
-        <VButton class="flex group gap-2" @click="toggleModal({})">
-          <IconsPlus class="w-6 h-6 text-white group-hover:text-blue-300 duration-300"/>
-          <span>Qo'shish</span>
-        </VButton>
       </div>
     </div>
     <Table class="pt-5" v-if="!loading">

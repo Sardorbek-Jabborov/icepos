@@ -38,7 +38,7 @@
           </td>
           <td class="!w-max">{{ sponsor?.phone_number }}</td>
           <td class="!w-max">{{ sponsor?.phone_number2 }}</td>
-          <td class="!w-max">{{ sponsor?.depts }} uzs</td>
+          <td class="!w-max">{{ sponsor?.debts }} uzs</td>
           <td class="!w-max">{{ sponsor?.created_at }}</td>
           <td>
             <button class="text-xl text-primary" @click="toggleModal(sponsor)">

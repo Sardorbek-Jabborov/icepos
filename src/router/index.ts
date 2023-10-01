@@ -74,6 +74,15 @@ const router = createRouter({
             beforeEnter: [auth],
             component: () => import('@/views/PStats.vue')
         },
+        {
+            path: '/debts',
+            name: 'PDebts',
+            meta: {
+                layout: 'default'
+            },
+            beforeEnter: [auth],
+            component: () => import('@/views/PDebts.vue')
+        },
     ]
 })
 

@@ -47,6 +47,12 @@
             <button class="text-xl text-primary" @click="go_consumer_orders(sponsor)">
               <i class="fas fa-edit">=></i>
             </button>
+            <button class="text-xl text-primary" @click="go_consumer_debts(sponsor)">
+              <i class="fas fa-edit">Q</i>
+            </button>
+            <button class="text-xl text-primary" @click="toggleModal2(sponsor)">
+              <IconsEdit class="w-6 h-6 text-[#3365FC] hover:text-black-100 duration-300"/>
+            </button>
           </td>
         </tr>
       </template>
@@ -63,6 +69,23 @@
             @close="toggleModal"
             @submitted="submitted"
             :show="showModal"
+            :consumer="current_consumer"
+        />
+      </div>
+    </Transition>
+
+    <Transition name="fade">
+      <div
+          v-if="showModal2"
+          class="fixed top-0 left-0 w-full h-full z-50 bg-modal hidden opacity-0"
+          :class="{ '!block opacity-100 overflow-hidden ': showModal2 }"
+          @click="onClickOutside"
+      >
+        <ModalDebts
+            class="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50 sm:max-w-[587px] w-[70%] sm:w-full modal-content"
+            @close="toggleModal2"
+            @submitted2="submitted2"
+            :show="showModal2"
             :consumer="current_consumer"
         />
       </div>
@@ -103,11 +126,13 @@ import IconsSearch from "@/components/Icons/Search.vue";
 import ModalCustomers from "@/components/Modal/Customers.vue";
 import Table from '@/components/CTable.vue'
 import {VueAwesomePaginate} from "vue-awesome-paginate";
+import ModalDebts from "@/components/Modal/Debts.vue";
 
 const route = useRoute()
 const router = useRouter()
 
 const showModal = ref(false)
+const showModal2 = ref(false)
 const loading = ref(false)
 const pageSizeOptions = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
 const pageSize = ref(10);
@@ -133,13 +158,23 @@ const toggleModal = (sponsor) => {
   current_consumer.value = sponsor
   showModal.value = !showModal.value
 }
-
+const toggleModal2 = (sponsor) => {
+  current_consumer.value = sponsor
+  showModal2.value = !showModal2.value
+}
+const submitted2 = () => {
+  toggleModal2()
+  fetchData()
+}
 const submitted = () => {
   toggleModal()
   fetchData()
 }
 const go_consumer_orders = (sponsor) => {
   router.push('/orders?consumer=' + sponsor.id)
+}
+const go_consumer_debts = (sponsor) => {
+  router.push('/debts?consumer=' + sponsor.id)
 }
 
 const fetchData = async () => {

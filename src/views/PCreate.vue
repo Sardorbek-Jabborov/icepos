@@ -162,7 +162,7 @@ const createOrder = async () => {
 
 async function load_page() {
   try {
-    const response = await useApi.get('/consumers/?page_size=10');
+    const response = await useApi.get('/consumers/?page_size=1000');
     consumers.data = response.results;
   } catch (error) {
     console.log(error)
@@ -170,7 +170,7 @@ async function load_page() {
   }
 
   try {
-    const response = await useApi.get('/couriers/?page_size=10');
+    const response = await useApi.get('/couriers/?page_size=1000');
     couriers.data = response.results;
   } catch (error) {
     console.error('Error fetching objects:', error);

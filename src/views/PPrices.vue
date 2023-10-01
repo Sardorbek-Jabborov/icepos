@@ -20,12 +20,6 @@
             <option v-for="consumer in consumers_list"  :value="consumer.id">{{ consumer.fio }}</option>
           </select>
         </div>
-        <div class="flex flex-col gap-2">
-          <select class="border border-gray-600 rounded- md p-2 h-[50px] rounded-md" v-model="courier">
-            <option selected value="">Tanlang:</option>
-            <option v-for="courier in couriers_list"  :value="courier.id">{{ courier.fio }}</option>
-          </select>
-        </div>
         <VButton class="flex group items-center gap-2" @click="fetchData()">
           <IconsFilter class="text-white group-hover:text-blue-300 w-4 h-4 duration-300"/>
           <span>Filter</span>
@@ -63,10 +57,6 @@
           <td class="!w-max">{{ sponsor?.status }}</td>
           <td class="!w-max">{{ sponsor?.created_at }}</td>
           <td>
-            <button class="text-xl text-primary" @click="order_action(sponsor, 'cancel')">
-              <i class="fas fa-edit">A</i>
-            </button>
-
             <button class="text-xl text-primary" @click="order_action(sponsor, 'complete')">
               <i class="fas fa-edit">B</i>
             </button>
@@ -118,8 +108,6 @@ const state = reactive({
 const status = ref('')
 const consumer = ref('')
 const consumers_list = ref([])
-const courier = ref('')
-const couriers_list = ref([])
 const loading = ref(false)
 const pageSizeOptions = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
 const pageSize = ref(10);
@@ -162,7 +150,7 @@ const fetchData = async () => {
   const date = formatDates()
   try {
     console.log(consumer)
-    const response = await useApi.get(`/orders/?created_at__date__gte=${date.fromDateFormatted}&created_at__date__lte=${date.toDateFormatted}&status=${status.value}&search=${search.value}&consumer=${consumer.value}&courier=${courier.value}&page=${currentPage.value}&page_size=${pageSize.value}`)
+    const response = await useApi.get(`/orders/?created_at__date__gte=${date.fromDateFormatted}&created_at__date__lte=${date.toDateFormatted}&status=${status.value}&search=${search.value}&consumer=${consumer.value}&page=${currentPage.value}&page_size=${pageSize.value}`)
     sponsors.data = response.results;
     sponsors.total = response.count;
     console.log(sponsors.data)
@@ -175,20 +163,12 @@ const fetchData = async () => {
 
 const load_filter_data = async () => {
   consumer.value = route.query.consumer || ''
-  courier.value = route.query.courier || ''
-
+  console.log(consumer.value)
   try {
     const response = await useApi.get(`/consumers/?page_size=1000`)
     consumers_list.value = response.results;
   } catch (error) {
     console.error('Error fetching consumers:', error);
-  }
-
-  try {
-    const response = await useApi.get(`/couriers/?page_size=1000`)
-    couriers_list.value = response.results;
-  } catch (error) {
-    console.error('Error fetching courier:', error);
   }
 }
 

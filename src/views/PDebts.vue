@@ -1,17 +1,18 @@
 <template>
   <div class="container">
-    <div class="">
-      <div v-if="loading" class="absolute animate-ping top-1/3 left-1/2 bg-gray-800 rounded-full h-20 w-20">
-      </div>
-      <div class="mt-5 flex justify-between">
-        <div
-            class="inline-flex gap-2 items-center bg-white py-2 px-3 rounded-xl border focus-within:border-gray-800 transition-all duration-300 ease-in-out">
-          <div>
-            <IconsSearch class="w-5 h-5 text-[#B1B1B8]"/>
-          </div>
-          <input type="text" class="bg-transparent outline-0" placeholder="Izlash..." @keyup="fetchData"
-                 v-model="search">
+    <div>
+      <div v-if="loading" class="absolute animate-ping top-1/3 left-1/2 bg-gray-800 rounded-full h-20 w-20"></div>
+      <div class="mt-5 flex gap-4">
+        <div class="flex flex-col gap-2">
+          <select class="border border-gray-600 rounded- md p-2 h-[50px] rounded-md" v-model="consumer">
+            <option selected value="">Tanlang:</option>
+            <option v-for="consumer in consumers_list"  :value="consumer.id">{{ consumer.fio }}</option>
+          </select>
         </div>
+        <VButton class="flex group items-center gap-2" @click="fetchData()">
+          <IconsFilter class="text-white group-hover:text-blue-300 w-4 h-4 duration-300"/>
+          <span>Filter</span>
+        </VButton>
         <VButton class="flex group gap-2" @click="toggleModal({})">
           <IconsPlus class="w-6 h-6 text-white group-hover:text-blue-300 duration-300"/>
           <span>Qo'shish</span>
@@ -21,9 +22,10 @@
     <Table class="pt-5" v-if="!loading">
       <template #thead>
         <td data-orded>#</td>
-        <td class="w-1/4 !text-left">F.I.Sh.</td>
-        <td>Tel. raqam</td>
-        <td>Tel. raqam 2</td>
+        <td class="!text-left">Mijoz</td>
+        <td>Tel. raqami</td>
+        <td>To'langan summa</td>
+        <td>Sana</td>
         <td>Amallar</td>
       </template>
       <template #tbody v-if="!loading">
@@ -31,40 +33,20 @@
           <td class="px-6" scope="row">
             {{ calculateOrder(index) }}
           </td>
-          <td class="!text-left" data-primary :title="sponsor?.full_name">
+          <td class="!text-left " data-primary :title="sponsor?.full_name">
             <span class="line-clamp-2 font-medium text-15p">
-              {{ sponsor?.fio }}
+              {{ sponsor?.consumer?.fio }}
             </span>
           </td>
-          <td class="!w-max">{{ sponsor?.phone_number }}</td>
-          <td class="!w-max">{{ sponsor?.phone_number2 }}</td>
+          <td class="!w-max">{{ sponsor?.consumer?.phone_number }}</td>
+          <td class="!w-max">{{ sponsor?.price }}</td>
+          <td class="!w-max">{{ sponsor?.created_at }}</td>
           <td>
-            <button class="text-xl text-primary" @click="toggleModal(sponsor)">
-              <IconsEdit class="w-6 h-6 text-[#3365FC] hover:text-black-100 duration-300"/>
-            </button>
-            <button class="text-xl text-primary" @click="go_orders(sponsor)">
-              <i class="fas fa-edit">=></i>
-            </button>
+            
           </td>
         </tr>
       </template>
     </Table>
-    <Transition name="fade">
-      <div
-          v-if="showModal"
-          class="fixed top-0 left-0 w-full h-full z-50 bg-modal hidden opacity-0"
-          :class="{ '!block opacity-100 overflow-hidden ': showModal }"
-          @click="onClickOutside"
-      >
-        <ModalCouriers
-            class="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50 sm:max-w-[587px] w-[70%] sm:w-full modal-content"
-            @close="toggleModal"
-            @submitted="submitted"
-            :show="showModal"
-            :consumer="current_courier"
-        />
-      </div>
-    </Transition>
     <div class="" v-if="!loading">
       <div class="page-size flex items-center justify-between">
         <div>
@@ -78,7 +60,7 @@
         <vue-awesome-paginate
             :total-items="sponsors.total"
             :items-per-page="pageSize"
-            :max-pages-shown="5"
+            :max-pages-shown="3"
             v-model="currentPage"
         />
       </div>
@@ -88,21 +70,28 @@
 
 <script setup>
 import {useApi} from "@/helpers/axios";
-import {onMounted, ref, reactive, watch, computed} from 'vue';
+import {onMounted, ref, reactive, watch} from 'vue';
 import {useRoute} from "vue-router";
 import {useRouter} from "vue-router";
 import Table from '@/components/CTable.vue'
-import ModalCouriers from "@/components/Modal/Couriers.vue"
 import VButton from "@/components/Button/VButton.vue";
-import IconsSearch from "@/components/Icons/Search.vue";
+import IconsFilter from "@/components/Icons/Filter.vue";
+import Datepicker from 'vuejs3-datepicker';
+import {useToast} from "vue-toastification";
 import IconsPlus from "@/components/Icons/Plus.vue";
-import IconsEdit from "@/components/Icons/Edit.vue";
-import {VueAwesomePaginate} from "vue-awesome-paginate";
 
+const toast = useToast()
 const route = useRoute()
 const router = useRouter()
 
+const state = reactive({
+  from_date: new Date(2023, 8, 1),
+  to_date: new Date(),
+});
 const showModal = ref(false)
+const status = ref('')
+const consumer = ref('')
+const consumers_list = ref([])
 const loading = ref(false)
 const pageSizeOptions = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
 const pageSize = ref(10);
@@ -113,49 +102,85 @@ const sponsors = reactive({
   data: [],
   total: 0,
 });
-const current_courier = ref({})
 
-function onClickOutside(event) {
-  const modalContent = document.querySelector('.modal-content');
-  if (modalContent && !modalContent.contains(event.target)) {
-    document.body.style.overflow = 'auto';
-    showModal.value = false;
-    current_courier.value = {}
-  }
-}
-const go_orders = (sponsor) => {
-  router.push('/orders?courier=' + sponsor.id)
-}
-const toggleModal = (sponsor) => {
-  current_courier.value = sponsor
+const formatDate = (date) => {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+};
+const toggleModal = () => {
   showModal.value = !showModal.value
-}
-
-const fetchData = async () => {
-  loading.value = true
-  try {
-    const response = await useApi.get(`/couriers/?search=${search.value}&page=${currentPage.value}&page_size=${pageSize.value}`);
-    sponsors.data = response.results;
-    sponsors.total = response.count;
-  } catch (error) {
-    console.error('Error fetching sponsors:', error);
-  } finally {
-    loading.value = false
-  }
 }
 
 const submitted = () => {
   toggleModal()
   fetchData()
 }
+const formatDates = () => {
+  const fromDateFormatted = formatDate(state?.from_date);
+  const toDateFormatted = formatDate(state?.to_date);
+  return {fromDateFormatted, toDateFormatted}
+};
+function onClickOutside(event) {
+  const modalContent = document.querySelector('.modal-content');
+  if (modalContent && !modalContent.contains(event.target)) {
+    document.body.style.overflow = 'auto';
+    showModal.value = false;
+    current_consumer.value = {}
+  }
+}
+
+const order_action = async (order, action) => {
+  const response = await useApi.post(`/orders/${order.id}/${action}/`);
+  if (response.success) {
+    fetchData()
+    toast.success('Buyurtma muvaffaqiyatli o\'zgartirildi!')
+  } else {
+    console.log(response)
+    toast.error('Buyurtma o\'zgartirishda xatolik yuz berdi!: ' + response)
+  }
+}
+
+
+const fetchData = async () => {
+  loading.value = true
+  const date = formatDates()
+  try {
+    console.log(consumer)
+    const response = await useApi.get(`/consumer-debts/?consumer=${consumer.value}&page=${currentPage.value}&page_size=${pageSize.value}`)
+    sponsors.data = response.results;
+    sponsors.total = response.count;
+    console.log(sponsors.data)
+  } catch (error) {
+    console.error('Error fetching orders:', error);
+  } finally {
+    loading.value = false
+  }
+}
+
+const load_filter_data = async () => {
+  consumer.value = route.query.consumer || ''
+  console.log(consumer.value)
+  try {
+    const response = await useApi.get(`/consumers/?page_size=1000`)
+    consumers_list.value = response.results;
+  } catch (error) {
+    console.error('Error fetching consumers:', error);
+  }
+}
 
 onMounted(() => {
+  load_filter_data();
   fetchData()
 })
+
+
 
 watch([pageSize, currentPage], () => {
   fetchData();
 });
+
 
 const calculateOrder = (index) => {
   return (currentPage.value - 1) * pageSize.value + index + 1;
@@ -163,7 +188,7 @@ const calculateOrder = (index) => {
 
 const updatePageSize = () => {
   currentPage.value = 1;
-  // fetchData();
+  fetchData();
   const query = {...route.query, page_size: pageSize.value};
   router.push({query});
 };

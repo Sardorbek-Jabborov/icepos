@@ -41,10 +41,14 @@ const state = reactive({
 const chartSeries = computed(() => {
   const resultData = stats.data?.results;
   if (!resultData) return [];
+  const item = resultData.map((item) => item.title)
   const data = resultData.map((item) => item.total_orders);
   return [
     {
-      data: data,
+      data: [{
+        x: data,
+        Y: item
+      }],
     },
   ];
 });
@@ -67,10 +71,11 @@ const chartOptions = {
 
 function showChart() {
   console.log(chartSeries)
-  console.log(stats.data?.results)
+  console.log(stats.data?.results?.map((item) => item.title))
 }
 
-const formatDate = (date: any) => {
+
+const formatDate = (date) => {
   const year = date.getFullYear();
   const month = String(date.getMonth() + 1).padStart(2, '0');
   const day = String(date.getDate()).padStart(2, '0');
@@ -83,12 +88,13 @@ const formatDates = () => {
   return {fromDateFormatted, toDateFormatted}
 };
 
+
 const getStats = async () => {
   const date = formatDates()
   try {
     const response = await useApi.get(`/most-sold-products/?from_date=${date.fromDateFormatted}&to_date=${date.toDateFormatted}&products_count=10`);
-    stats.data.results.push(response);
-    console.log(stats.data.results);
+    stats.data.results = response;
+    console.log(response);
   } catch (error) {
     console.error("Error fetching data:", error);
   }

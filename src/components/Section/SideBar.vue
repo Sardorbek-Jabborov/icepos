@@ -55,6 +55,10 @@ const tabs = [
   {
     tab: 'Kirim',
     url: '/debts'
+  },
+  {
+    tab: 'Statistika-Test',
+    url: '/statistics'
   }
 ]
 

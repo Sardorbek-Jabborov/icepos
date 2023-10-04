@@ -17,13 +17,13 @@
         <div class="flex flex-col gap-2">
           <select class="border border-gray-600 rounded- md p-2 h-[50px] rounded-md" v-model="consumer">
             <option selected value="">Tanlang:</option>
-            <option v-for="consumer in consumers_list"  :value="consumer.id">{{ consumer.fio }}</option>
+            <option v-for="consumer in consumers_list" :value="consumer.id">{{ consumer.fio }}</option>
           </select>
         </div>
         <div class="flex flex-col gap-2">
           <select class="border border-gray-600 rounded- md p-2 h-[50px] rounded-md" v-model="courier">
             <option selected value="">Tanlang:</option>
-            <option v-for="courier in couriers_list"  :value="courier.id">{{ courier.fio }}</option>
+            <option v-for="courier in couriers_list" :value="courier.id">{{ courier.fio }}</option>
           </select>
         </div>
         <VButton class="flex group items-center gap-2" @click="fetchData()">
@@ -63,13 +63,14 @@
           <td class="!w-max">{{ sponsor?.status }}</td>
           <td class="!w-max">{{ sponsor?.created_at }}</td>
           <td>
-            <button class="text-xl text-primary" @click="order_action(sponsor, 'cancel')">
-              <i class="fas fa-edit">A</i>
-            </button>
-
-            <button class="text-xl text-primary" @click="order_action(sponsor, 'complete')">
-              <i class="fas fa-edit">B</i>
-            </button>
+            <div class="flex items-center justify-center gap-2">
+              <button class="text-xl text-primary" @click="order_action(sponsor, 'cancel')">
+                <IconsClose class="text-[#B2B7C1] w-6 h-6 hover:text-red duration-300"/>
+              </button>
+              <button class="text-xl text-primary" @click="order_action(sponsor, 'complete')">
+                <IconsAccept class="text-[#B2B7C1] w-5 h-5 hover:text-green-400 duration-300"/>
+              </button>
+            </div>
           </td>
         </tr>
       </template>
@@ -105,6 +106,8 @@ import VButton from "@/components/Button/VButton.vue";
 import IconsFilter from "@/components/Icons/Filter.vue";
 import Datepicker from 'vuejs3-datepicker';
 import {useToast} from "vue-toastification";
+import IconsClose from "@/components/Icons/Close.vue";
+import IconsAccept from "@/components/Icons/Accept.vue";
 
 const toast = useToast()
 const route = useRoute()
@@ -196,7 +199,6 @@ onMounted(() => {
   load_filter_data();
   fetchData()
 })
-
 
 
 watch([pageSize, currentPage], () => {

@@ -68,10 +68,14 @@ export const useBasketStore = defineStore('basket', () => {
                     toast.error(value);
                 }
             } else {
-                toast.error("Buyurtma yaratishda xatolik yuz berdi!1");
+                toast.error("Buyurtma yaratishda xatolik yuz berdi!");
+                console.log(courierId,
+                    consumerId,
+                    products,
+                    full_paid || false,
+                    price_paid || 0,)
             }
-
-            throw error; // Rethrow the error to indicate failure
+            throw error;
         }
     };
 

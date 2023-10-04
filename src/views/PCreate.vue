@@ -64,10 +64,11 @@
           </div>
           <div class="flex flex-col gap-2">
             <label for="customers">Mijoz:</label>
-            <select name="customers" class="border border-gray-600 rounded- md p-2" v-model="selectedConsumer">
-              <option disabled selected value>Tanlang:</option>
-              <option v-for="consumer in consumers.data" :value="consumer.id">{{ consumer?.fio }}</option>
-            </select>
+<!--            <select name="customers" class="border border-gray-600 rounded- md p-2" v-model="selectedConsumer">-->
+<!--              <option disabled selected value>Tanlang:</option>-->
+<!--              <option v-for="consumer in consumers.data" :value="consumer.id">{{ consumer?.fio }}</option>-->
+<!--            </select>-->
+            <CSelect :options="consumers?.data" v-model="selectedConsumer"/>
           </div>
           <div class="flex flex-col gap-2">
             <label for="couriers">Kuryer:</label>
@@ -97,7 +98,6 @@
           <p>Savatchada hech narsa yo'q.</p>
         </div>
       </div>
-      <Check v-else :data="check"/>
     </div>
   </div>
 </template>
@@ -112,7 +112,7 @@ import {useToast} from "vue-toastification";
 import Input from "@/components/Input/Input.vue";
 import IconsBasket from "@/components/Icons/Basket.vue"
 import IconsClear from "@/components/Icons/Clear.vue"
-import Check from "@/components/CCheck.vue";
+import CSelect from "@/components/Common/CSelect.vue";
 
 const store = useProductStore()
 const basket = useBasketStore()

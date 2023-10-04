@@ -52,7 +52,6 @@
   </div>
 </template>
 <script setup lang="ts">
-import {ref} from "vue";
 import VueHtml2pdf from "vue3-html2pdf";
 import IconsSave from "@/components/Icons/Save.vue";
 import VButton from "@/components/Button/VButton.vue";
@@ -60,6 +59,4 @@ import VButton from "@/components/Button/VButton.vue";
 defineProps({
   data: {}
 });
-
-
 </script>

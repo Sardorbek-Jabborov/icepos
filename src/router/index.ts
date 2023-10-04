@@ -83,6 +83,15 @@ const router = createRouter({
             beforeEnter: [auth],
             component: () => import('@/views/PDebts.vue')
         },
+        {
+            path: '/statistics',
+            name: 'PStatistics',
+            meta: {
+                layout: 'default'
+            },
+            beforeEnter: [auth],
+            component: () => import('@/views/PStatistics.vue')
+        },
     ]
 })
 

@@ -145,7 +145,7 @@ const fetchData = async () => {
 }
 
 const updateQuantity = (item: any) => {
-  let newValue = Math.max(1, parseInt(item.quantity, 10) || 1);
+  let newValue = Math.max(0, parseInt(item.quantity, 10) || 0);
   item.quantity = newValue.toString().slice(0, 5);
   for (let i = 0; i < basket.basket.productId.length; i++) {
     if (basket.basket.productId[i].product === item.product.id) {

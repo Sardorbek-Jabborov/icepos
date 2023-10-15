@@ -43,7 +43,7 @@
               <IconsEdit class="w-6 h-6 text-[#3365FC] hover:text-black-100 duration-300"/>
             </button>
             <button class="text-xl text-primary" @click="go_orders(sponsor)">
-              <i class="fas fa-edit">=></i>
+              <IconsProdList class="w-6 h-6 text-[#3365FC] hover:text-black-100 duration-300"/>
             </button>
           </td>
         </tr>
@@ -98,6 +98,7 @@ import IconsSearch from "@/components/Icons/Search.vue";
 import IconsPlus from "@/components/Icons/Plus.vue";
 import IconsEdit from "@/components/Icons/Edit.vue";
 import {VueAwesomePaginate} from "vue-awesome-paginate";
+import IconsProdList from "@/components/Icons/ProdList.vue";
 
 const route = useRoute()
 const router = useRouter()
@@ -123,6 +124,7 @@ function onClickOutside(event) {
     current_courier.value = {}
   }
 }
+
 const go_orders = (sponsor) => {
   router.push('/orders?courier=' + sponsor.id)
 }

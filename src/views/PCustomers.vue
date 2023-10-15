@@ -45,13 +45,13 @@
               <IconsEdit class="w-6 h-6 text-[#3365FC] hover:text-black-100 duration-300"/>
             </button>
             <button class="text-xl text-primary" @click="go_consumer_orders(sponsor)">
-              <i class="fas fa-edit">=></i>
+              <IconsProdList class="w-6 h-6 text-[#3365FC] hover:text-black-100 duration-300"/>
             </button>
             <button class="text-xl text-primary" @click="go_consumer_debts(sponsor)">
-              <i class="fas fa-edit">Q</i>
+              <IconsDebt class="w-6 h-6 text-[#3365FC] hover:text-black-100 duration-300"/>
             </button>
             <button class="text-xl text-primary" @click="toggleModal2(sponsor)">
-              <IconsEdit class="w-6 h-6 text-[#3365FC] hover:text-black-100 duration-300"/>
+              <IconsBorrow class="w-6 h-6 text-[#3365FC] hover:text-black-100 duration-300"/>
             </button>
           </td>
         </tr>
@@ -122,6 +122,9 @@ import VButton from "@/components/Button/VButton.vue";
 import UIPagination from "@/components/UIPagination.vue";
 import IconsPlus from "@/components/Icons/Plus.vue";
 import IconsEdit from "@/components/Icons/Edit.vue";
+import IconsDebt from "@/components/Icons/Debt.vue"
+import IconsBorrow from "@/components/Icons/Borrow.vue"
+import IconsProdList from "@/components/Icons/ProdList.vue"
 import IconsSearch from "@/components/Icons/Search.vue";
 import ModalCustomers from "@/components/Modal/Customers.vue";
 import Table from '@/components/CTable.vue'

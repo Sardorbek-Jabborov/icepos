@@ -64,10 +64,11 @@
           </div>
           <div class="flex flex-col gap-2">
             <label for="customers">Mijoz:</label>
-            <select name="customers" class="border border-gray-600 rounded- md p-2" v-model="selectedConsumer">
-              <option disabled selected value>Tanlang:</option>
-              <option v-for="consumer in consumers.data" :value="consumer.id">{{ consumer?.fio }}</option>
-            </select>
+            <!--            <select name="customers" class="border border-gray-600 rounded- md p-2" v-model="selectedConsumer">-->
+            <!--              <option disabled selected value>Tanlang:</option>-->
+            <!--              <option v-for="consumer in consumers.data" :value="consumer.id">{{ consumer?.fio }}</option>-->
+            <!--            </select>-->
+            <CSelect :options="consumers?.data" v-model="selectedConsumer"/>
           </div>
           <div class="flex flex-col gap-2">
             <label for="couriers">Kuryer:</label>
@@ -97,7 +98,6 @@
           <p>Savatchada hech narsa yo'q.</p>
         </div>
       </div>
-      <Check v-else :data="check"/>
     </div>
   </div>
 </template>
@@ -112,7 +112,7 @@ import {useToast} from "vue-toastification";
 import Input from "@/components/Input/Input.vue";
 import IconsBasket from "@/components/Icons/Basket.vue"
 import IconsClear from "@/components/Icons/Clear.vue"
-import Check from "@/components/CCheck.vue";
+import CSelect from "@/components/Common/CSelect.vue";
 
 const store = useProductStore()
 const basket = useBasketStore()
@@ -145,7 +145,7 @@ const fetchData = async () => {
 }
 
 const updateQuantity = (item: any) => {
-  let newValue = Math.max(1, parseInt(item.quantity, 10) || 1);
+  let newValue = Math.max(0, parseInt(item.quantity, 10) || 0);
   item.quantity = newValue.toString().slice(0, 5);
   for (let i = 0; i < basket.basket.productId.length; i++) {
     if (basket.basket.productId[i].product === item.product.id) {
@@ -155,7 +155,15 @@ const updateQuantity = (item: any) => {
 };
 
 const createOrder = async () => {
-  check.value = await basket.createOrder(selectedCourier.value, selectedConsumer.value, basket.basket.productId, fullPaid.value, paidPrice.value)
+  let products = []
+  for (let i = 0; i < basket.basket.products.length; i++) {
+    products.push({
+      "product": basket.basket.products[i].product.id,
+      "quantity": basket.basket.products[i].quantity
+    })
+  }
+  console.log(products)
+  check.value = await basket.createOrder(selectedCourier.value, selectedConsumer.value, products, fullPaid.value, paidPrice.value)
   checkAvailable.value = true
   console.log(check.value)
 }

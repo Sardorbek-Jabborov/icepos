@@ -12,7 +12,6 @@ export const useBasketStore = defineStore('basket', () => {
     });
     const check = ref()
     const addToBasket = (item: { id: any; }) => {
-        onlyByID(item)
         const existingItem = basket.products.find((basketItem) => basketItem.product.id === item.id);
         if (existingItem) {
             existingItem.quantity += 1;
@@ -23,21 +22,6 @@ export const useBasketStore = defineStore('basket', () => {
             });
         }
     };
-
-    const onlyByID = (item: { id: any; }) => {
-        // @ts-ignore
-        const existingItem = basket.productId.find((basketItem) => basketItem.product.id === item.id);
-        if (existingItem) {
-            // @ts-ignore
-            existingItem.quantity += 1;
-        } else {
-            // @ts-ignore
-            basket.productId.push({
-                product: item?.id,
-                quantity: 1,
-            });
-        }
-    }
 
     const removeItem = (id: number) => {
         // @ts-ignore

@@ -40,15 +40,20 @@ const state = reactive({
 
 const chartSeries = computed(() => {
   const resultData = stats.data?.results;
-  if (!resultData) return [];
-  const item = resultData.map((item) => item.title)
-  const data = resultData.map((item) => item.total_orders);
+  if (!Array.isArray(resultData)) {
+    return [];
+  }
+
+  const data = resultData.map((item, index) => ({
+    x: item.title,
+    y: item.total_orders,
+    fillColor: `color-${index + 1}`, // Use a unique color class
+  }));
+
   return [
     {
-      data: [{
-        x: data,
-        Y: item
-      }],
+      name: 'Total Orders',
+      data: data,
     },
   ];
 });
@@ -64,14 +69,32 @@ const chartOptions = {
       columnWidth: "55%",
     },
   },
-  xaxis: {
-    categories: stats.data?.results?.map((item) => item.title),
+  legend: {
+    show: true, // Show the legend
+    position: 'bottom', // Position the legend at the bottom
+    horizontalAlign: 'center', // Center align the legend items
   },
+  xaxis: {
+    categories: stats.data?.results?.map((item) => item.title) || [],
+  },
+  yaxis: {
+    labels: {
+      show: true,
+    },
+  },
+
 };
 
+
 function showChart() {
-  console.log(chartSeries)
-  console.log(stats.data?.results?.map((item) => item.title))
+  const resultData = stats.data?.results;
+
+  console.log(chartSeries);
+  if (Array.isArray(resultData)) {
+    console.log(resultData.map((item) => item.title));
+  } else {
+    console.log("stats.data?.results is not an array");
+  }
 }
 
 
@@ -93,8 +116,8 @@ const getStats = async () => {
   const date = formatDates()
   try {
     const response = await useApi.get(`/most-sold-products/?from_date=${date.fromDateFormatted}&to_date=${date.toDateFormatted}&products_count=10`);
-    stats.data.results = response;
-    console.log(response);
+    stats.data.results = response.results;
+    console.log(response.results);
   } catch (error) {
     console.error("Error fetching data:", error);
   }

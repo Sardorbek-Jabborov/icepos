@@ -64,10 +64,10 @@
           </div>
           <div class="flex flex-col gap-2">
             <label for="customers">Mijoz:</label>
-<!--            <select name="customers" class="border border-gray-600 rounded- md p-2" v-model="selectedConsumer">-->
-<!--              <option disabled selected value>Tanlang:</option>-->
-<!--              <option v-for="consumer in consumers.data" :value="consumer.id">{{ consumer?.fio }}</option>-->
-<!--            </select>-->
+            <!--            <select name="customers" class="border border-gray-600 rounded- md p-2" v-model="selectedConsumer">-->
+            <!--              <option disabled selected value>Tanlang:</option>-->
+            <!--              <option v-for="consumer in consumers.data" :value="consumer.id">{{ consumer?.fio }}</option>-->
+            <!--            </select>-->
             <CSelect :options="consumers?.data" v-model="selectedConsumer"/>
           </div>
           <div class="flex flex-col gap-2">
@@ -155,7 +155,15 @@ const updateQuantity = (item: any) => {
 };
 
 const createOrder = async () => {
-  check.value = await basket.createOrder(selectedCourier.value, selectedConsumer.value, basket.basket.productId, fullPaid.value, paidPrice.value)
+  let products = []
+  for (let i = 0; i < basket.basket.products.length; i++) {
+    products.push({
+      "product": basket.basket.products[i].product.id,
+      "quantity": basket.basket.products[i].quantity
+    })
+  }
+  console.log(products)
+  check.value = await basket.createOrder(selectedCourier.value, selectedConsumer.value, products, fullPaid.value, paidPrice.value)
   checkAvailable.value = true
   console.log(check.value)
 }

@@ -44,7 +44,7 @@
         <p class="font-medium mt-2">Оплата: {{ data?.paid_price }} UZS</p>
         <p class="font-medium">Текущий долг: {{ data?.debt }}</p>
       </section>
-    </vue-html2pdf>
+      </vue-html2pdf>
     <VButton class="py-1 w-full flex items-center gap-2">
       <IconsSave class="w-6 h-6"/>
       <span>Check</span>

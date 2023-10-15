@@ -40,11 +40,17 @@ const state = reactive({
 
 const chartSeries = computed(() => {
   const resultData = stats.data?.results;
-  if (!resultData) return [];
-  const data = resultData.map((item) => item.total_orders);
+  if (!Array.isArray(resultData)) {
+    return [];
+  }
+  const data = resultData.map((item) => ({
+    x: item.title,
+    y: item.total_orders,
+  }));
+
   return [
     {
-      name: "Total Orders",
+      name: 'Total Orders', // Legend label (item title)
       data: data,
     },
   ];
@@ -54,9 +60,26 @@ const chartOptions = {
   chart: {
     type: "bar",
   },
+  plotOptions: {
+    bar: {
+      horizontal: false,
+      columnWidth: "55%",
+    },
+  },
+  legend: {
+    show: true, // Show the legend
+    position: 'bottom', // Position the legend at the bottom
+    horizontalAlign: 'center', // Center align the legend items
+  },
   xaxis: {
     categories: stats.data?.results?.map((item) => item.title) || [],
   },
+  yaxis: {
+    labels: {
+      show: true,
+    },
+  },
+
 };
 
 function showChart() {

@@ -43,16 +43,14 @@ const chartSeries = computed(() => {
   if (!Array.isArray(resultData)) {
     return [];
   }
-
-  const data = resultData.map((item, index) => ({
+  const data = resultData.map((item) => ({
     x: item.title,
     y: item.total_orders,
-    fillColor: `color-${index + 1}`, // Use a unique color class
   }));
 
   return [
     {
-      name: 'Total Orders',
+      name: 'Total Orders', // Legend label (item title)
       data: data,
     },
   ];

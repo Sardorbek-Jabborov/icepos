@@ -64,18 +64,11 @@
           </div>
           <div class="flex flex-col gap-2">
             <label for="customers">Mijoz:</label>
-            <!--            <select name="customers" class="border border-gray-600 rounded- md p-2" v-model="selectedConsumer">-->
-            <!--              <option disabled selected value>Tanlang:</option>-->
-            <!--              <option v-for="consumer in consumers.data" :value="consumer.id">{{ consumer?.fio }}</option>-->
-            <!--            </select>-->
             <CSelect :options="consumers?.data" v-model="selectedConsumer"/>
           </div>
           <div class="flex flex-col gap-2">
             <label for="couriers">Kuryer:</label>
-            <select name="couriers" class="border border-gray-600 rounded- md p-2" v-model="selectedCourier">
-              <option disabled selected value>Tanlang:</option>
-              <option v-for="courier in couriers.data" :value="courier.id">{{ courier?.fio }}</option>
-            </select>
+            <CSelect :options="couriers?.data" v-model="selectedCourier"/>
           </div>
           <div class="flex gap-3 mt-5">
             <label for="full_paid">To'liq to'landi?</label>

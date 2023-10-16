@@ -1,26 +1,26 @@
 <template>
-  <div class="relative" @click="toggleSelect">
-    <div class="border border-gray-600 rounded-md p-2 flex items-center">
-      <div>
-        <input
-            v-model="searchTerm"
-            @input="filterOptions"
-            @blur="closeSelect"
-            class="rounded-md outline-0"
-            placeholder="Qidirish..."
-        />
-        <div v-if="isOpen">
-          <div
-              v-for="option in filteredOptions"
-              :key="option?.id"
-              @click="selectOption(option)"
-              :class="{ 'selected-option': option?.id === selectedOption?.id }"
-          >
-            {{ option.fio }}
+  <div class="relative">
+    <div class="border border-gray-600 rounded-md">
+      <div @click="toggleSelect" class="flex justify-between p-2 pb-1 w-full">
+        <div class="flex gap-2">
+          <div v-if="selectedOption">
+            {{ selectedOption.fio }}
           </div>
+          <input v-model="searchTerm" @input="filterOptions" class="w-full outline-0" placeholder="Qidirish..."/>
+        </div>
+        <ArrowDown class="text-[#C4CDD5] w-6 h-6 rotate-90 ml-auto"/>
+      </div>
+      <div v-if="isOpen" class="p-2 pt-1 border-t border-gray-700">
+        <div
+            v-for="option in filteredOptions"
+            :key="option.id"
+            class="hover:cursor-pointer border-b last:border-0 border-gray-300 py-1"
+            @click="selectOption(option)"
+            :class="{ 'selected-option': option?.id === selectedOption?.id }"
+        >
+          {{ option.fio }}
         </div>
       </div>
-      <ArrowDown class="text-[#C4CDD5] w-6 h-6 rotate-90 ml-auto"/>
     </div>
   </div>
 </template>
@@ -43,6 +43,9 @@ const toggleSelect = () => {
 
 const filterOptions = () => {
   isOpen.value = true;
+  filteredOptions.value = options.filter((option) =>
+      option.fio.toLowerCase().includes(searchTerm.value.toLowerCase())
+  );
 };
 
 const closeSelect = () => {
@@ -50,9 +53,13 @@ const closeSelect = () => {
 };
 
 const selectOption = (option) => {
+  searchTerm.value = ''
+  console.log(option)
+  console.log("selectOption called"); // Add this line
   selectedOption.value = option;
-  isOpen.value = false; // Close the select
+  isOpen.value = false;
 };
+
 
 const filteredOptions = computed(() => {
   const lowerSearchTerm = searchTerm.value.toLowerCase();
@@ -66,6 +73,8 @@ watch(selectedOption, (newVal) => {
     emit("update:modelValue", newVal);
   }
 });
+
+
 </script>
 
 <style scoped>

@@ -19,14 +19,14 @@
               minlength="5"
               required
               placeholder="admin"
-              class="bg-gray-200/20 text-[15px] rounded-md border-2 border-blue-400 outline-0 p-2 ring-0"
+              class="bg-gray-200/20 text-[15px] rounded-md border-2 border-blue-400 outline-0 p-2 ring-0 focus:border-blue-300 duration-300"
               :class="{'border-[red]' :error?.show}"
           />
         </div>
         <div class="flex flex-col mt-4">
           <label for="password" class="uppercase font-bold text-xs mb-2">Parol</label>
           <div
-              class="flex justify-between items-center bg-gray-200/20 rounded-md border-2 border-blue-400 p-2 max-h-[42px]"
+              class="flex justify-between items-center bg-gray-200/20 rounded-md border-2 border-blue-400 p-2 max-h-[42px] focus-within:border-blue-300 duration-300"
               :class="{'border-[red]' :error?.show}"
           >
             <input

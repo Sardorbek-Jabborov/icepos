@@ -156,7 +156,7 @@ const createOrder = async () => {
     })
   }
   console.log(products)
-  check.value = await basket.createOrder(selectedCourier.value, selectedConsumer.value, products, fullPaid.value, paidPrice.value)
+  check.value = await basket.createOrder(selectedCourier.value?.id, selectedConsumer.value?.id, products, fullPaid.value, paidPrice.value)
   checkAvailable.value = true
   console.log(check.value)
 }

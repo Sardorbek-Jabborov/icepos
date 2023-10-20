@@ -35,14 +35,13 @@
     <Table class="pt-5" v-if="!loading">
       <template #thead>
         <td data-orded>#</td>
-        <td class="!text-left">Mijoz</td>
-        <td>Tel. raqami</td>
+        <td class="">Mijoz</td>
         <td>Kuryer</td>
-        <td>Tel. raqami</td>
         <td>To'langan summa</td>
         <td>Umumiy summa</td>
         <td>Status</td>
         <td>Yaratilgan sana</td>
+        <td>Optom sotish?</td>
         <td>Amallar</td>
       </template>
       <template #tbody v-if="!loading">
@@ -50,18 +49,22 @@
           <td class="px-6" scope="row">
             {{ calculateOrder(index) }}
           </td>
-          <td class="!text-left " data-primary :title="sponsor?.full_name">
+          <td class="!w-max " data-primary :title="sponsor?.full_name">
             <span class="line-clamp-2 font-medium text-15p">
-              {{ sponsor?.consumer?.fio }}
+              {{ sponsor?.consumer?.fio }} <p>{{ sponsor?.consumer?.phone_number }} </p>
             </span>
           </td>
-          <td class="!w-max">{{ sponsor?.consumer?.phone_number }}</td>
-          <td class="!w-max">{{ sponsor?.courier?.fio }}</td>
-          <td class="!w-max">{{ sponsor?.courier?.phone_number }}</td>
+          <td class="!w-max">
+            <span class="line-clamp-2 font-medium text-15p">
+              {{ sponsor?.courier?.fio }} <p>{{ sponsor?.courier?.phone_number }} </p>
+            </span>
+          </td>
           <td class="!w-max">{{ sponsor?.paid_price }}</td>
           <td class="!w-max">{{ sponsor?.total_price }}</td>
           <td class="!w-max">{{ sponsor?.status }}</td>
           <td class="!w-max">{{ sponsor?.created_at }}</td>
+          <td class="!w-max" v-if="sponsor?.bulk_sell">Ha</td> 
+          <td class="!w-max" v-if="!sponsor?.bulk_sell">Yo'q</td> 
           <td>
             <div class="flex items-center justify-center gap-2">
               <button class="text-xl text-primary" @click="order_action(sponsor, 'cancel')">
@@ -149,13 +152,17 @@ const formatDates = () => {
 
 
 const order_action = async (order, action) => {
-  const response = await useApi.post(`/orders/${order.id}/${action}/`);
-  if (response.success) {
-    fetchData()
-    toast.success('Buyurtma muvaffaqiyatli o\'zgartirildi!')
-  } else {
-    console.log(response)
-    toast.error('Buyurtma o\'zgartirishda xatolik yuz berdi!: ' + response)
+  try {
+    const response = await useApi.post(`/orders/${order.id}/${action}/`);
+    if (response.success) {
+      fetchData()
+      toast.success('Buyurtma muvaffaqiyatli o\'zgartirildi!')
+    } else {
+      console.log(response)
+      toast.error('Buyurtma o\'zgartirishda xatolik yuz berdi!: ' + response)
+    }
+  } catch (error) {
+    toast.error(error.response.data.error || error.response.data.detail)
   }
 }
 

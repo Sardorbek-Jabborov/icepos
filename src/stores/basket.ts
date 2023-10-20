@@ -50,7 +50,7 @@ export const useBasketStore = defineStore('basket', () => {
         }
     };
 
-    const createOrder = async (courierId, consumerId, products, full_paid, price_paid) => {
+    const createOrder = async (courierId, consumerId, products, full_paid, price_paid, bulk_sell) => {
         try {
             return await useApi.post('/orders/', {
                 courier: courierId,
@@ -58,6 +58,7 @@ export const useBasketStore = defineStore('basket', () => {
                 products: products,
                 full_paid: full_paid || false,
                 price_paid: price_paid || 0,
+                bulk_sell: bulk_sell || false
             });
         } catch (error) {
             console.log(error);

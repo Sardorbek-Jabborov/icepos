@@ -62,7 +62,7 @@
           <div class="py-2 border-b border-gray-700">
             Umumiy narxi: {{ totalPrice }} UZS
           </div>
-          <div class="flex flex-col gap-2">
+          <div class="flex flex-col gap-2" v-if="!bulk_sell">
             <label for="customers">Mijoz:</label>
             <CSelect :options="consumers?.data" v-model="selectedConsumer"/>
           </div>
@@ -73,6 +73,10 @@
           <div class="flex gap-3 mt-5">
             <label for="full_paid">To'liq to'landi?</label>
             <input type="checkbox" name="full_paid" v-model="fullPaid"/>
+          </div>
+          <div class="flex gap-3 mt-5">
+            <label for="bulk_sell">Optom sotish?</label>
+            <input type="checkbox" name="bulk_sell" v-model="bulk_sell"/>
           </div>
           <div class="w-auto" v-if="!fullPaid">
             <label for="price_paid">To'langan summa:</label>
@@ -124,6 +128,7 @@ const selectedConsumer = ref()
 const selectedCourier = ref()
 const paidPrice = ref(0)
 const fullPaid = ref(false)
+const bulk_sell = ref(false)
 const checkAvailable = ref(false)
 
 
@@ -156,7 +161,7 @@ const createOrder = async () => {
     })
   }
   console.log(products)
-  check.value = await basket.createOrder(selectedCourier.value?.id, selectedConsumer.value?.id, products, fullPaid.value, paidPrice.value)
+  check.value = await basket.createOrder(selectedCourier.value?.id, selectedConsumer.value?.id, products, fullPaid.value, paidPrice.value, bulk_sell.value)
   checkAvailable.value = true
   console.log(check.value)
 }

@@ -73,6 +73,9 @@
               <button class="text-xl text-primary" @click="order_action(sponsor, 'complete')">
                 <IconsAccept class="text-[#B2B7C1] w-5 h-5 hover:text-green-400 duration-300"/>
               </button>
+              <button class="text-xl text-primary" @click="get_chek(sponsor)">
+                🔄
+              </button>
             </div>
           </td>
         </tr>
@@ -100,7 +103,7 @@
 </template>
 
 <script setup>
-import {useApi} from "@/helpers/axios";
+import {useApi, baseURL} from "@/helpers/axios";
 import {onMounted, ref, reactive, watch} from 'vue';
 import {useRoute} from "vue-router";
 import {useRouter} from "vue-router";
@@ -207,6 +210,12 @@ onMounted(() => {
   fetchData()
 })
 
+
+const get_chek = (order) => {
+  console.log(order)
+  var url = `${baseURL}/chek/${order.id}/`
+  window.open(url, '_blank');
+}
 
 watch([pageSize, currentPage], () => {
   fetchData();

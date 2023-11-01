@@ -100,7 +100,7 @@
 </template>
 
 <script setup lang="ts">
-import {useApi} from "@/helpers/axios";
+import {useApi, baseURL} from "@/helpers/axios";
 import {computed, onMounted, reactive, ref} from 'vue';
 import VButton from "@/components/Button/VButton.vue";
 import {useProductStore} from "@/stores/product";
@@ -110,6 +110,7 @@ import Input from "@/components/Input/Input.vue";
 import IconsBasket from "@/components/Icons/Basket.vue"
 import IconsClear from "@/components/Icons/Clear.vue"
 import CSelect from "@/components/Common/CSelect.vue";
+import axios from "axios";
 
 const store = useProductStore()
 const basket = useBasketStore()
@@ -163,7 +164,13 @@ const createOrder = async () => {
   console.log(products)
   check.value = await basket.createOrder(selectedCourier.value?.id, selectedConsumer.value?.id, products, fullPaid.value, paidPrice.value, bulk_sell.value)
   checkAvailable.value = true
-  console.log(check.value)
+
+
+  /// open new tab with url
+  var url = `${baseURL}/chek/${check.value.id}/`
+  window.open(url, '_blank');
+  // refresh window
+  window.location.reload();
 }
 
 async function load_page() {

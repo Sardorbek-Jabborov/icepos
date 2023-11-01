@@ -2,7 +2,8 @@ import axios, {AxiosRequestConfig, AxiosResponse, AxiosError} from 'axios';
 import {getItem} from "@/service/localstorage";
 
 // Set base URL read from
-axios.defaults.baseURL = 'http://devserver.uz/api';
+export const baseURL = 'http://devserver.uz/api';
+axios.defaults.baseURL = baseURL
 
 // Set access token
 const accessToken = getItem('access_token');
@@ -31,4 +32,4 @@ export const useApi = {
     patch: <T>(url: string, data: any): Promise<T> => axios.patch(url, data, requestConfig).then(response => response.data),
 };
 
-export default {useApi};
+export default {useApi, baseURL};

@@ -73,7 +73,7 @@
               <button class="text-xl text-primary" @click="order_action(sponsor, 'complete')">
                 <IconsAccept class="text-[#B2B7C1] w-5 h-5 hover:text-green-400 duration-300"/>
               </button>
-              <button class="text-xl text-primary" @click="toggleModal(sponsor)">
+              <button class="text-xl text-primary" @click="toggleModal(sponsor)" v-if="sponsor.bulk_sell && sponsor.status == 'Yetkazib berish'">
                 ↩️
               </button>
               <button class="text-xl text-primary" @click="get_chek(sponsor)">
@@ -114,7 +114,7 @@
             @close="toggleModal"
             @submitted="submitted"
             :show="showModal"
-            :object="sponsor"
+            :object="currentObject"
         />
       </div>
     </Transition>
@@ -175,9 +175,16 @@ function onClickOutside(event) {
 const toggleModal = (object) => {
   currentObject.value = object
   showModal.value = !showModal.value
+  if (object?.products) {
+    for(let i = 0; i < object.products.length; i++) {
+      object.products[i].rem = object.products[i].quantity
+    }
+  }
+  
 }
 
 const submitted = () => {
+  console.log("subasdfasdfasd")
   toggleModal({})
   fetchData()
 }

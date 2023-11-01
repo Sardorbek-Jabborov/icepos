@@ -1,7 +1,7 @@
 <template>
   <div class="p-7 bg-white rounded-xl max-w-[586px]">
     <div class="flex justify-between pb-7 border-b border-gray-100">
-      <p class="text-2xl font-bold text-blue-700">{{ props.consumer?.id ? "Tahrirlash" : "Qo'shish" }}</p>
+      <p class="text-2xl font-bold text-blue-700"> Qaytgan maxsulotlar </p>
       <button @click='close'>
         <IconsClose class="text-[#B2B7C1] w-6 h-6 hover:text-red duration-300"/>
       </button>
@@ -9,11 +9,11 @@
     <form @submit.prevent="submitForm">
       <div class="md:mt-5 sm:mt-4 mt-2 flex flex-col md:gap-6 sm:gap-4 gap-2" style="max-height: 500px; overflow-y: scroll !important;">
         <Input
-            v-for="(product, index) in all_products"
-            :label="product.title"
+            v-for="(product, index) in props.object.products"
+            :label="product.product.title"
             placeholder="Miqdor"
             type="number"
-            v-model="product.to_sell"
+            v-model="product.rem"
             required
         />
       </div>
@@ -48,15 +48,21 @@ interface Props {
 
 const emit = defineEmits(['open', 'close', 'submitted'])
 const submitForm = async () => {
-    const url = 'bulk-sell/create/'
+    const url = `bulk-sell/${props.object.id}/rem/`
     const method = 'post'
     let data = {
-      "data": props.object.value
+      "data": []
     }
+    for(let i=0; i<props.object.products.length; i++) {
+      data["data"].push([
+        props.object.products[i].product.id,
+        Number(props.object.products[i].rem)
+      ])
+    }
+    console.log(data)
     const response = await useApi[method](url, data)
-    toast.success('Muvaffaqiyatli saqlandi')
+    toast.success('Muvaffaqiyatli qaytatildi')
     emit('submitted')
-  // window.location.reload()
 }
 
 

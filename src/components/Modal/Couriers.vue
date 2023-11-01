@@ -115,7 +115,6 @@ const emit = defineEmits(['open', 'close', 'submitted'])
 const submitForm = async () => {
   $v.value.$touch()
   if ($v.value.$invalid) {
-    console.log($v.value.$error)
   } else {
     const url = props.consumer?.id ? `/couriers/${props.consumer.id}/` : '/couriers/'
     const method = props.consumer?.id ? 'put' : 'post'

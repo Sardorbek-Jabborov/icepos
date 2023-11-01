@@ -42,7 +42,7 @@ const props = defineProps<Props>()
 
 interface Props {
   show: boolean
-  all_products: any
+  object: any
 }
 
 
@@ -51,7 +51,7 @@ const submitForm = async () => {
     const url = 'bulk-sell/create/'
     const method = 'post'
     let data = {
-      "data": props.all_products.value
+      "data": props.object.value
     }
     const response = await useApi[method](url, data)
     toast.success('Muvaffaqiyatli saqlandi')

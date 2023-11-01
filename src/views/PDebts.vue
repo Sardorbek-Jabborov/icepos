@@ -133,7 +133,6 @@ const order_action = async (order, action) => {
     fetchData()
     toast.success('Buyurtma muvaffaqiyatli o\'zgartirildi!')
   } else {
-    console.log(response)
     toast.error('Buyurtma o\'zgartirishda xatolik yuz berdi!: ' + response)
   }
 }
@@ -143,11 +142,9 @@ const fetchData = async () => {
   loading.value = true
   const date = formatDates()
   try {
-    console.log(consumer)
     const response = await useApi.get(`/consumer-debts/?consumer=${consumer.value}&page=${currentPage.value}&page_size=${pageSize.value}`)
     sponsors.data = response.results;
     sponsors.total = response.count;
-    console.log(sponsors.data)
   } catch (error) {
     console.error('Error fetching orders:', error);
   } finally {
@@ -157,7 +154,6 @@ const fetchData = async () => {
 
 const load_filter_data = async () => {
   consumer.value = route.query.consumer || ''
-  console.log(consumer.value)
   try {
     const response = await useApi.get(`/consumers/?page_size=1000`)
     consumers_list.value = response.results;

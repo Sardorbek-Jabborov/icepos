@@ -73,6 +73,9 @@
               <button class="text-xl text-primary" @click="order_action(sponsor, 'complete')">
                 <IconsAccept class="text-[#B2B7C1] w-5 h-5 hover:text-green-400 duration-300"/>
               </button>
+              <button class="text-xl text-primary" @click="toggleModal(sponsor)">
+                ↩️
+              </button>
               <button class="text-xl text-primary" @click="get_chek(sponsor)">
                 🔄
               </button>
@@ -99,6 +102,22 @@
         />
       </div>
     </div>
+    <Transition name="fade">
+      <div
+          v-if="showModal"
+          class="fixed top-0 left-0 w-full h-full z-50 bg-modal hidden opacity-0"
+          :class="{ '!block opacity-100 overflow-hidden ': showModal }"
+          @click="onClickOutside"
+      >
+        <ModalBulkSell
+            class="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50 sm:max-w-[587px] w-[70%] sm:w-full modal-content"
+            @close="toggleModal"
+            @submitted="submitted"
+            :show="showModal"
+            :object="sponsor"
+        />
+      </div>
+    </Transition>
   </div>
 </template>
 
@@ -108,6 +127,7 @@ import {onMounted, ref, reactive, watch} from 'vue';
 import {useRoute} from "vue-router";
 import {useRouter} from "vue-router";
 import Table from '@/components/CTable.vue'
+import ModalBulkSell from "@/components/Modal/BulkSell.vue"
 import VButton from "@/components/Button/VButton.vue";
 import IconsFilter from "@/components/Icons/Filter.vue";
 import Datepicker from 'vuejs3-datepicker';
@@ -135,6 +155,32 @@ const pageSize = ref(10);
 const currentPage = ref(1);
 const search = ref('');
 
+const showModal = ref(false)
+
+const objects = reactive({
+  data: [],
+  total: 0,
+});
+const currentObject = ref({})
+
+function onClickOutside(event) {
+  const modalContent = document.querySelector('.modal-content');
+  if (modalContent && !modalContent.contains(event.target)) {
+    document.body.style.overflow = 'auto';
+    showModal.value = false;
+    currentObject.value = {}
+  }
+}
+
+const toggleModal = (object) => {
+  currentObject.value = object
+  showModal.value = !showModal.value
+}
+
+const submitted = () => {
+  toggleModal({})
+  fetchData()
+}
 const sponsors = reactive({
   data: [],
   total: 0,
@@ -161,7 +207,6 @@ const order_action = async (order, action) => {
       fetchData()
       toast.success('Buyurtma muvaffaqiyatli o\'zgartirildi!')
     } else {
-      console.log(response)
       toast.error('Buyurtma o\'zgartirishda xatolik yuz berdi!: ' + response)
     }
   } catch (error) {
@@ -174,11 +219,9 @@ const fetchData = async () => {
   loading.value = true
   const date = formatDates()
   try {
-    console.log(consumer)
     const response = await useApi.get(`/orders/?created_at__date__gte=${date.fromDateFormatted}&created_at__date__lte=${date.toDateFormatted}&status=${status.value}&search=${search.value}&consumer=${consumer.value}&courier=${courier.value}&page=${currentPage.value}&page_size=${pageSize.value}`)
     sponsors.data = response.results;
     sponsors.total = response.count;
-    console.log(sponsors.data)
   } catch (error) {
     console.error('Error fetching orders:', error);
   } finally {
@@ -212,7 +255,6 @@ onMounted(() => {
 
 
 const get_chek = (order) => {
-  console.log(order)
   var url = `${baseURL}/chek/${order.id}/`
   window.open(url, '_blank');
 }

@@ -54,8 +54,6 @@ const closeSelect = () => {
 
 const selectOption = (option) => {
   searchTerm.value = ''
-  console.log(option)
-  console.log("selectOption called"); // Add this line
   selectedOption.value = option;
   isOpen.value = false;
 };

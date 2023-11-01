@@ -61,7 +61,6 @@ const emit = defineEmits(['open', 'close', 'submitted2'])
 const submitForm = async () => {
   $v.value.$touch()
   if ($v.value.$invalid) {
-    console.log($v.value.$error)
   } else {
     const url = `/debts/`
     const method = 'post'

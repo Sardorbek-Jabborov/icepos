@@ -83,8 +83,6 @@ const chartOptions = {
 };
 
 function showChart() {
-  console.log(chartSeries.value)
-  console.log(chartOptions.value)
 }
 
 
@@ -107,7 +105,6 @@ const getStats = async () => {
   try {
     const response = await useApi.get(`/most-sold-products/?from_date=${date.fromDateFormatted}&to_date=${date.toDateFormatted}&products_count=10`);
     stats.data.results = response.results;
-    console.log(response.results);
   } catch (error) {
     console.error("Error fetching data:", error);
   }

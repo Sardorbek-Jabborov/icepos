@@ -37,7 +37,8 @@
           </td>
           <td class="!w-max">{{ object?.count_in_box }}</td>
           <td class="!w-max">{{ object?.price }}</td>
-          <td class="!w-max">{{ object?.stock_quantity }}</td>
+          <td class="!w-max" v-if="object?.stock_quantity < 10" style="background: rgb(255 136 136)">{{ object?.stock_quantity }}</td>
+          <td class="!w-max" v-else>{{ object?.stock_quantity }}</td>
 
           <td>
             <button class="text-xl text-primary" @click="toggleModal(object)">

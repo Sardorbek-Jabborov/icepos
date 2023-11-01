@@ -100,9 +100,7 @@ const $v = useVuelidate<IContactForm>(rules, form)
 const submitForm = async () => {
   $v.value.$touch()
   if ($v.value.$invalid) {
-    console.log($v.value.$error)
   } else {
-    console.log($v.value)
     const method = props.object?.id ? 'put' : 'post'
     if (method == 'post') {
       store.addProduct(form, () => emit("submitted"))

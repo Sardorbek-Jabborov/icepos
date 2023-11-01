@@ -37,7 +37,6 @@ onMounted(() => {
         })
         .catch((error) => {
           auth.logOut()
-          console.log("error", error)
         })
   }
 })

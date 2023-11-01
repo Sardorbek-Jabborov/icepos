@@ -61,10 +61,7 @@ export const useBasketStore = defineStore('basket', () => {
                 bulk_sell: bulk_sell || false
             });
         } catch (error) {
-            console.log(error);
             if (error.response.status === 400) {
-                console.log("Working....");
-                console.log(error.response.data);
                 for (const [key, value] of Object.entries(error.response.data)) {
                     toast.error(value);
                 }

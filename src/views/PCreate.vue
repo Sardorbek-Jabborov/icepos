@@ -161,7 +161,6 @@ const createOrder = async () => {
       "quantity": basket.basket.products[i].quantity
     })
   }
-  console.log(products)
   check.value = await basket.createOrder(selectedCourier.value?.id, selectedConsumer.value?.id, products, fullPaid.value, paidPrice.value, bulk_sell.value)
   checkAvailable.value = true
 
@@ -178,8 +177,6 @@ async function load_page() {
     const response = await useApi.get('/consumers/?page_size=1000');
     consumers.data = response.results;
   } catch (error) {
-    console.log(error)
-    console.error('Error fetching objects:', error);
   }
 
   try {

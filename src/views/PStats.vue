@@ -7,9 +7,6 @@
         <IconsFilter class="text-white group-hover:text-blue-300 w-4 h-4 duration-300"/>
         <span>Filter</span>
       </VButton>
-      <VButton @click="showChart">
-        ShowChart
-      </VButton>
     </div>
     <VueApexCharts
         type="bar"

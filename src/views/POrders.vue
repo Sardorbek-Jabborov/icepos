@@ -79,6 +79,9 @@
               <button class="text-xl text-primary" @click="get_chek(sponsor)">
                 🔄
               </button>
+              <button class="text-xl text-primary" @click="toggleModal1(sponsor)">
+                ℹ️
+              </button>
             </div>
           </td>
         </tr>
@@ -118,6 +121,22 @@
         />
       </div>
     </Transition>
+    <Transition name="fade">
+      <div
+          v-if="showModal1"
+          class="fixed top-0 left-0 w-full h-full z-50 bg-modal hidden opacity-0"
+          :class="{ '!block opacity-100 overflow-hidden ': showModal1 }"
+          @click="onClickOutside"
+      >
+        <ModalOrderProducts
+            class="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50 sm:max-w-[587px] w-[70%] sm:w-full modal-content"
+            @close="toggleModal1"
+            @submitted="submitted1"
+            :show="showModal1"
+            :object="currentObject"
+        />
+      </div>
+    </Transition>
   </div>
 </template>
 
@@ -128,6 +147,7 @@ import {useRoute} from "vue-router";
 import {useRouter} from "vue-router";
 import Table from '@/components/CTable.vue'
 import ModalBulkSell from "@/components/Modal/BulkSell.vue"
+import ModalOrderProducts from "@/components/Modal/OrderProducts.vue"
 import VButton from "@/components/Button/VButton.vue";
 import IconsFilter from "@/components/Icons/Filter.vue";
 import Datepicker from 'vuejs3-datepicker';
@@ -156,6 +176,7 @@ const currentPage = ref(1);
 const search = ref('');
 
 const showModal = ref(false)
+const showModal1 = ref(false)
 
 const objects = reactive({
   data: [],
@@ -168,6 +189,7 @@ function onClickOutside(event) {
   if (modalContent && !modalContent.contains(event.target)) {
     document.body.style.overflow = 'auto';
     showModal.value = false;
+    showModal1.value = false;
     currentObject.value = {}
   }
 }
@@ -180,12 +202,18 @@ const toggleModal = (object) => {
       object.products[i].rem = object.products[i].quantity
     }
   }
-  
+}
+const toggleModal1 = async (object) => {
+  currentObject.value = object
+  showModal1.value = !showModal1.value
 }
 
 const submitted = () => {
-  console.log("subasdfasdfasd")
   toggleModal({})
+  fetchData()
+}
+const submitted1 = () => {
+  toggleModal1({})
   fetchData()
 }
 const sponsors = reactive({

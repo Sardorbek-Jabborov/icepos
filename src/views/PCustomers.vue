@@ -53,6 +53,9 @@
             <button class="text-xl text-primary" @click="toggleModal2(sponsor)">
               <IconsBorrow class="w-6 h-6 text-[#3365FC] hover:text-black-100 duration-300"/>
             </button>
+            <button class="text-xl text-primary" @click="toggleModal3(sponsor)">
+              💲
+            </button>
           </td>
         </tr>
       </template>
@@ -87,6 +90,22 @@
             @submitted2="submitted2"
             :show="showModal2"
             :consumer="current_consumer"
+        />
+      </div>
+    </Transition>
+    <Transition name="fade">
+      <div
+          v-if="showModal3"
+          class="fixed top-0 left-0 w-full h-full z-50 bg-modal hidden opacity-0"
+          :class="{ '!block opacity-100 overflow-hidden ': showModal3 }"
+          @click="onClickOutside"
+      >
+        <ModalConsumerProductPrice
+            class="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50 sm:max-w-[587px] w-[70%] sm:w-full modal-content"
+            @close="toggleModal3"
+            @submitted3="submitted3"
+            :show="showModal3"
+            :object="current_consumer"
         />
       </div>
     </Transition>
@@ -130,12 +149,14 @@ import ModalCustomers from "@/components/Modal/Customers.vue";
 import Table from '@/components/CTable.vue'
 import {VueAwesomePaginate} from "vue-awesome-paginate";
 import ModalDebts from "@/components/Modal/Debts.vue";
+import ModalConsumerProductPrice from "@/components/Modal/ConsumerProductPrice.vue";
 
 const route = useRoute()
 const router = useRouter()
 
 const showModal = ref(false)
 const showModal2 = ref(false)
+const showModal3 = ref(false)
 const loading = ref(false)
 const pageSizeOptions = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
 const pageSize = ref(10);
@@ -153,6 +174,8 @@ function onClickOutside(event) {
   if (modalContent && !modalContent.contains(event.target)) {
     document.body.style.overflow = 'auto';
     showModal.value = false;
+    showModal2.value = false;
+    showModal3.value = false;
     current_consumer.value = {}
   }
 }
@@ -165,8 +188,18 @@ const toggleModal2 = (sponsor) => {
   current_consumer.value = sponsor
   showModal2.value = !showModal2.value
 }
+const toggleModal3 = async (sponsor) => {
+  if (!showModal3.value)
+    sponsor.product_prices = await get_consumer_product_prices(sponsor.id)
+  current_consumer.value = sponsor
+  showModal3.value = !showModal3.value
+}
 const submitted2 = () => {
   toggleModal2()
+  fetchData()
+}
+const submitted3 = () => {
+  toggleModal3()
   fetchData()
 }
 const submitted = () => {
@@ -192,6 +225,19 @@ const fetchData = async () => {
     loading.value = false
   }
 }
+
+const get_consumer_product_prices = async (pk) => {
+  try {
+    const response = await useApi.get(`/cp-price-list/${pk}/`);
+    return response
+  } catch (error) {
+    console.error('Error fetching sponsors:', error);
+  } finally {
+    loading.value = false
+  }
+  return []
+}
+
 onMounted(() => {
   fetchData()
 })
